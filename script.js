@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Constantes
-    const EVENT_DATE = new Date('2025-09-28T15:00:00').getTime();
+    const EVENT_DATE = new Date(2025, 8, 28, 15, 0, 0).getTime(); // Mês 8 = setembro (0-indexado)
     const YOUTUBE_START_TIME = 124;
     const YOUTUBE_END_TIME = 240;
     const MAX_VOTES_PER_SESSION = 1;
