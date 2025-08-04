@@ -30,15 +30,15 @@ document.addEventListener('DOMContentLoaded', function() {
     let isPlaying = false;
     let loopInterval;
     
-    const startTime = 11; // 0:11 em segundos
-    const endTime = 90;   // 1:30 em segundos
+    const startTime = 124; // 2:04 em segundos (2*60 + 4)
+    const endTime = 240;   // 4:00 em segundos (4*60)
     
     // Inicializar player do YouTube quando API estiver pronta
     window.onYouTubeIframeAPIReady = function() {
         player = new YT.Player('youtube-player', {
             height: '0',
             width: '0',
-            videoId: '4bMOTTJqGgM',
+            videoId: '8Hu6PUt40KQ',
             playerVars: {
                 autoplay: 0,
                 controls: 0,
@@ -205,23 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     displayMessages();
     
-    // Gerar QR Code
-    function generateQRCode() {
-        const currentUrl = window.location.href;
-        QRCode.toCanvas(document.getElementById('qrcode'), currentUrl, {
-            width: 200,
-            margin: 2,
-            color: {
-                dark: '#8b7355',
-                light: '#ffffff'
-            }
-        }, function(error) {
-            if (error) console.error(error);
-        });
-    }
-    
-    // Gerar QR Code quando a página carregar
-    setTimeout(generateQRCode, 1000);
+
     
     // Efeito de confete
     function createConfetti() {
