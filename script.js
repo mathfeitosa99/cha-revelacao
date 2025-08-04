@@ -162,6 +162,67 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(section);
     });
     
+    // Sistema de mensagens
+    const messageForm = document.querySelector('.message-form');
+    const messagesList = document.getElementById('messagesList');
+    let messages = JSON.parse(localStorage.getItem('babyMessages')) || [];
+    
+    function displayMessages() {
+        messagesList.innerHTML = '';
+        messages.slice(-10).reverse().forEach(msg => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message-item';
+            messageDiv.innerHTML = `
+                <div class="message-author">${msg.name}</div>
+                <div class="message-text">${msg.text}</div>
+                <div class="message-time">${msg.time}</div>
+            `;
+            messagesList.appendChild(messageDiv);
+        });
+    }
+    
+    messageForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('messageName').value;
+        const text = document.getElementById('messageText').value;
+        
+        if (name && text) {
+            const message = {
+                name: name,
+                text: text,
+                time: new Date().toLocaleString('pt-BR')
+            };
+            
+            messages.push(message);
+            localStorage.setItem('babyMessages', JSON.stringify(messages));
+            
+            displayMessages();
+            messageForm.reset();
+            createConfetti();
+        }
+    });
+    
+    displayMessages();
+    
+    // Gerar QR Code
+    function generateQRCode() {
+        const currentUrl = window.location.href;
+        QRCode.toCanvas(document.getElementById('qrcode'), currentUrl, {
+            width: 200,
+            margin: 2,
+            color: {
+                dark: '#8b7355',
+                light: '#ffffff'
+            }
+        }, function(error) {
+            if (error) console.error(error);
+        });
+    }
+    
+    // Gerar QR Code quando a página carregar
+    setTimeout(generateQRCode, 1000);
+    
     // Efeito de confete
     function createConfetti() {
         for (let i = 0; i < 30; i++) {

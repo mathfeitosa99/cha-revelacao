@@ -407,6 +407,123 @@ section {
     transform: translateY(-2px);
 }
 
+.messages {
+    background: white;
+}
+
+.messages h3 {
+    color: #8b7355;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.messages p {
+    color: #6b6b6b;
+    margin-bottom: 30px;
+}
+
+.message-form {
+    background: #f9f7f4;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.message-form input,
+.message-form textarea {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 2px solid #e0ddd8;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.message-form textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.message-form button {
+    background: #b8a690;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+
+.message-form button:hover {
+    background: #8b7355;
+}
+
+.messages-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.message-item {
+    background: #f5f3f0;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border-left: 4px solid #b8a690;
+}
+
+.message-author {
+    font-weight: bold;
+    color: #8b7355;
+    margin-bottom: 8px;
+}
+
+.message-text {
+    color: #4a4a4a;
+    line-height: 1.5;
+}
+
+.message-time {
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 8px;
+}
+
+.qr-section {
+    background: #f9f7f4;
+    text-align: center;
+}
+
+.qr-section h3 {
+    color: #8b7355;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.qr-section p {
+    color: #6b6b6b;
+    margin-bottom: 30px;
+}
+
+.qr-container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    display: inline-block;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+#qrcode {
+    margin-bottom: 15px;
+}
+
+.qr-text {
+    color: #8b7355;
+    font-weight: bold;
+    margin: 0;
+}
+
 .gifts {
     background: white;
 }
