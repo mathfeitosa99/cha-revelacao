@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Constantes
-    const EVENT_DATE = new Date('2024-09-28T15:00:00').getTime();
+    const EVENT_DATE = new Date('2025-09-28T15:00:00').getTime();
     const YOUTUBE_START_TIME = 124;
     const YOUTUBE_END_TIME = 240;
     const MAX_VOTES_PER_SESSION = 1;
