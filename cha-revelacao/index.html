@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chá Revelação - Aline & Matheus</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="hero">
+            <div class="hero-content">
+                <h1 class="title">Chá Revelação</h1>
+                <p class="subtitle">Aline & Matheus</p>
+                <div class="date-info">
+                    <p class="date">12 de Outubro, 2025</p>
+                    <p class="time">15:00h</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="countdown">
+            <div class="content">
+                <h2>Contagem Regressiva</h2>
+                <div class="countdown-timer">
+                    <div class="time-unit">
+                        <span class="number" id="days">00</span>
+                        <span class="label">Dias</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="number" id="hours">00</span>
+                        <span class="label">Horas</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="number" id="minutes">00</span>
+                        <span class="label">Minutos</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="number" id="seconds">00</span>
+                        <span class="label">Segundos</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="invitation">
+            <div class="content">
+                <h2>Você está convidado(a)!</h2>
+                <p>Venha descobrir conosco se nosso bebê será um menino ou uma menina. Sua presença tornará este momento ainda mais especial!</p>
+            </div>
+        </section>
+
+        <section class="voting">
+            <div class="content">
+                <h3>O que você acha que será?</h3>
+                <div class="voting-options">
+                    <button class="vote-btn boy" data-vote="menino">
+                        <span class="emoji">👶🏻</span>
+                        <span class="text">Menino</span>
+                        <span class="percentage" id="boyPercentage">50%</span>
+                    </button>
+                    <button class="vote-btn girl" data-vote="menina">
+                        <span class="emoji">👶🏻</span>
+                        <span class="text">Menina</span>
+                        <span class="percentage" id="girlPercentage">50%</span>
+                    </button>
+                </div>
+                <div class="vote-count">
+                    <p>Total de votos: <span id="totalVotes">0</span></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="voting">
+            <div class="content">
+                <h3>Qual é o seu palpite?</h3>
+                <p>Vote e veja o que os outros convidados acham!</p>
+                <div class="vote-options">
+                    <button class="vote-btn boy" data-vote="menino">
+                        👶 Menino
+                    </button>
+                    <button class="vote-btn girl" data-vote="menina">
+                        👧 Menina
+                    </button>
+                </div>
+                <div class="vote-results">
+                    <div class="result-bar">
+                        <div class="bar boy-bar">
+                            <span id="boyPercentage">50%</span>
+                        </div>
+                        <div class="bar girl-bar">
+                            <span id="girlPercentage">50%</span>
+                        </div>
+                    </div>
+                    <p class="total-votes">Total de votos: <span id="totalVotes">0</span></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="details">
+            <div class="content">
+                <h3>Detalhes do Evento</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h4>📍 Local</h4>
+                        <p>Salão de Festas 1<br>Travessa Green Village, 40 - Araucária/PR</p>
+                        <button class="map-btn" onclick="openMap()">Ver no Mapa</button>
+                    </div>
+                    <div class="info-item">
+                        <h4>🕒 Horário</h4>
+                        <p>15:00h às 19:00h</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="rsvp">
+            <div class="content">
+                <h3>Confirme sua Presença</h3>
+                <form class="rsvp-form">
+                    <input type="text" placeholder="Seu nome" required>
+                    <input type="email" placeholder="Seu email" required>
+                    <select required>
+                        <option value="">Você virá?</option>
+                        <option value="sim">Sim, estarei lá!</option>
+                        <option value="nao">Não poderei ir</option>
+                    </select>
+                    <button type="submit">Confirmar</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="gifts">
+            <div class="content">
+                <h3>Lista de Presentes</h3>
+                <p>Algumas sugestões para o nosso bebê 👶</p>
+                <div class="gifts-grid">
+                    <div class="gift-item">
+                        <div class="gift-icon">🍼</div>
+                        <h4>Mamadeiras</h4>
+                        <p>Kit com mamadeiras anti-cólica</p>
+                    </div>
+                    <div class="gift-item">
+                        <div class="gift-icon">🧦</div>
+                        <h4>Roupinhas</h4>
+                        <p>Bodies, macacões e conjuntinhos</p>
+                    </div>
+                    <div class="gift-item">
+                        <div class="gift-icon">🧸</div>
+                        <h4>Fraldas</h4>
+                        <p>Tamanhos RN, P, M (sempre úteis!)</p>
+                    </div>
+                    <div class="gift-item">
+                        <div class="gift-icon">🧴</div>
+                        <h4>Toalhas</h4>
+                        <p>Toalhas de banho macias</p>
+                    </div>
+                </div>
+                <p class="gifts-note">Ou contribua com o PIX: <strong>aline.matheus@email.com</strong></p>
+            </div>
+        </section>
+
+        <section class="messages">
+            <div class="content">
+                <h3>Mural de Recados</h3>
+                <p>Deixe uma mensagem carinhosa para os futuros papais! 💕</p>
+                
+                <form class="message-form">
+                    <input type="text" id="messageName" placeholder="Seu nome" required>
+                    <textarea id="messageText" placeholder="Sua mensagem..." required></textarea>
+                    <button type="submit">Enviar Recado</button>
+                </form>
+                
+                <div class="messages-list" id="messagesList">
+                    <!-- Mensagens aparecerão aqui -->
+                </div>
+            </div>
+        </section>
+
+        <section class="qr-section">
+            <div class="content">
+                <h3>QR Code do Convite</h3>
+                <p>Compartilhe facilmente com seus amigos!</p>
+                <div class="qr-container">
+                    <div id="qrcode">
+                        <div class="qr-loading">
+                            <div class="loading-spinner"></div>
+                            <p>Gerando QR Code...</p>
+                        </div>
+                    </div>
+                    <p class="qr-text">Escaneie para acessar o convite</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="social-share">
+            <div class="content">
+                <h3>Compartilhe a Alegria!</h3>
+                <p>Use nossa hashtag: <strong>#ChaRevelacaoAlineMatheus</strong></p>
+                <div class="share-buttons">
+                    <button class="share-btn whatsapp" onclick="shareWhatsApp()">
+                        📱 WhatsApp
+                    </button>
+                    <button class="share-btn facebook" onclick="shareFacebook()">
+                        🔗 Facebook
+                    </button>
+                    <button class="share-btn copy" onclick="copyLink()">
+                        📋 Copiar Link
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="youtube-player" style="display: none;"></div>
+    
+    <button class="music-toggle" id="musicToggle">🎵</button>
+    
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="script.js"></script>
+</body>
+</html>
