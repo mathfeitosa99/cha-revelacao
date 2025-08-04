@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
             width: '0',
             videoId: '8Hu6PUt40KQ',
             playerVars: {
-                autoplay: 0,
+                autoplay: 1,
                 controls: 0,
                 showinfo: 0,
                 modestbranding: 1,
@@ -49,6 +49,14 @@ document.addEventListener('DOMContentLoaded', function() {
             events: {
                 onReady: function(event) {
                     player.setVolume(30);
+                    // Tentar iniciar automaticamente
+                    setTimeout(function() {
+                        player.seekTo(startTime);
+                        player.playVideo();
+                        isPlaying = true;
+                        musicToggle.textContent = '🎵';
+                        musicToggle.style.background = '#b8a690';
+                    }, 1000);
                 },
                 onStateChange: function(event) {
                     if (event.data === YT.PlayerState.PLAYING && isPlaying) {
@@ -205,7 +213,27 @@ document.addEventListener('DOMContentLoaded', function() {
     
     displayMessages();
     
-
+    // Autoplay fallback - tentar tocar quando usuário interagir
+    let autoplayAttempted = false;
+    
+    function attemptAutoplay() {
+        if (!autoplayAttempted && player) {
+            autoplayAttempted = true;
+            player.seekTo(startTime);
+            player.playVideo().catch(() => {
+                // Se falhar, mostrar botão piscando
+                musicToggle.style.animation = 'pulse 1s infinite';
+            });
+            isPlaying = true;
+            musicToggle.textContent = '🎵';
+            musicToggle.style.background = '#b8a690';
+        }
+    }
+    
+    // Tentar autoplay em qualquer interação do usuário
+    document.addEventListener('click', attemptAutoplay, { once: true });
+    document.addEventListener('scroll', attemptAutoplay, { once: true });
+    document.addEventListener('keydown', attemptAutoplay, { once: true });
     
     // Efeito de confete
     function createConfetti() {
