@@ -49,14 +49,16 @@ document.addEventListener('DOMContentLoaded', function() {
             events: {
                 onReady: function(event) {
                     player.setVolume(30);
-                    // Tentar iniciar automaticamente
+                    // Múltiplas tentativas de autoplay
                     setTimeout(function() {
-                        player.seekTo(startTime);
-                        player.playVideo();
-                        isPlaying = true;
-                        musicToggle.textContent = '🎵';
-                        musicToggle.style.background = '#b8a690';
-                    }, 1000);
+                        tryAutoplay();
+                    }, 500);
+                    setTimeout(function() {
+                        tryAutoplay();
+                    }, 2000);
+                    setTimeout(function() {
+                        tryAutoplay();
+                    }, 4000);
                 },
                 onStateChange: function(event) {
                     if (event.data === YT.PlayerState.PLAYING && isPlaying) {
@@ -213,20 +215,38 @@ document.addEventListener('DOMContentLoaded', function() {
     
     displayMessages();
     
-    // Autoplay fallback - tentar tocar quando usuário interagir
-    let autoplayAttempted = false;
-    
-    function attemptAutoplay() {
-        if (!autoplayAttempted && player) {
-            autoplayAttempted = true;
+    // Função para tentar autoplay
+    function tryAutoplay() {
+        if (!player || isPlaying) return;
+        
+        try {
             player.seekTo(startTime);
-            player.playVideo().catch(() => {
-                // Se falhar, mostrar botão piscando
-                musicToggle.style.animation = 'pulse 1s infinite';
-            });
+            player.playVideo();
             isPlaying = true;
             musicToggle.textContent = '🎵';
             musicToggle.style.background = '#b8a690';
+            musicToggle.style.animation = 'none';
+            document.getElementById('musicHint').style.display = 'none';
+            console.log('Música iniciada automaticamente!');
+        } catch (error) {
+            console.log('Autoplay bloqueado, aguardando interação do usuário');
+            musicToggle.style.animation = 'pulse 2s infinite';
+            // Mostrar dica após 3 segundos
+            setTimeout(function() {
+                if (!isPlaying) {
+                    document.getElementById('musicHint').style.display = 'block';
+                }
+            }, 3000);
+        }
+    }
+    
+    // Autoplay fallback - tentar tocar quando usuário interagir
+    let userInteracted = false;
+    
+    function attemptAutoplay() {
+        if (!userInteracted && player) {
+            userInteracted = true;
+            tryAutoplay();
         }
     }
     
@@ -234,6 +254,21 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', attemptAutoplay, { once: true });
     document.addEventListener('scroll', attemptAutoplay, { once: true });
     document.addEventListener('keydown', attemptAutoplay, { once: true });
+    document.addEventListener('touchstart', attemptAutoplay, { once: true });
+    
+    // Tentar autoplay quando a página ficar visível
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden && !isPlaying) {
+            setTimeout(tryAutoplay, 1000);
+        }
+    });
+    
+    // Tentar autoplay quando a janela ganhar foco
+    window.addEventListener('focus', function() {
+        if (!isPlaying) {
+            setTimeout(tryAutoplay, 500);
+        }
+    });
     
     // Efeito de confete
     function createConfetti() {
