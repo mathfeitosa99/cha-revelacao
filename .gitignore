@@ -1,0 +1,6 @@
+# Arquivos desnecessários
+.DS_Store
+Thumbs.db
+*.log
+node_modules/
+.env
