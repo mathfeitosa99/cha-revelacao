@@ -1,116 +1,175 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Contador regressivo
-    const eventDate = new Date('2025-10-12T15:00:00').getTime();
+    // Constantes
+    const EVENT_DATE = new Date('2024-09-28T15:00:00').getTime();
+    const YOUTUBE_START_TIME = 124;
+    const YOUTUBE_END_TIME = 240;
+    const MAX_VOTES_PER_SESSION = 1;
+    const MAX_MESSAGES_PER_SESSION = 3;
+    const MAX_RSVP_PER_SESSION = 1;
+    
+    // Contador regressivo otimizado
+    let countdownInterval;
+    let isTabVisible = true;
     
     function updateCountdown() {
+        if (!isTabVisible) return;
+        
         const now = new Date().getTime();
-        const distance = eventDate - now;
+        const distance = EVENT_DATE - now;
+        
+        if (distance < 0) {
+            document.querySelector('.countdown-timer').innerHTML = '<h2>O evento começou!</h2>';
+            clearInterval(countdownInterval);
+            return;
+        }
         
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
         
-        document.getElementById('days').textContent = days.toString().padStart(2, '0');
-        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
         
-        if (distance < 0) {
-            document.querySelector('.countdown-timer').innerHTML = '<h2>O evento começou!</h2>';
-        }
+        if (daysEl) daysEl.textContent = days.toString().padStart(2, '0');
+        if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
+        if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
+        if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
     }
     
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
+    // Controle de visibilidade da aba
+    document.addEventListener('visibilitychange', function() {
+        isTabVisible = !document.hidden;
+    });
     
-    // Controle de música YouTube com trecho específico
+    updateCountdown();
+    countdownInterval = setInterval(updateCountdown, 1000);
+    
+    // Controle de música YouTube otimizado
     const musicToggle = document.getElementById('musicToggle');
     let player;
     let isPlaying = false;
     let loopInterval;
     
-    const startTime = 124; // 2:04 em segundos (2*60 + 4)
-    const endTime = 240;   // 4:00 em segundos (4*60)
-    
-    // Inicializar player do YouTube quando API estiver pronta
-    window.onYouTubeIframeAPIReady = function() {
-        player = new YT.Player('youtube-player', {
-            height: '0',
-            width: '0',
-            videoId: '8Hu6PUt40KQ',
-            playerVars: {
-                autoplay: 1,
-                controls: 0,
-                showinfo: 0,
-                modestbranding: 1,
-                start: startTime
-            },
-            events: {
-                onReady: function(event) {
-                    player.setVolume(30);
-                    // Múltiplas tentativas de autoplay
-                    setTimeout(function() {
-                        tryAutoplay();
-                    }, 500);
-                    setTimeout(function() {
-                        tryAutoplay();
-                    }, 2000);
-                    setTimeout(function() {
-                        tryAutoplay();
-                    }, 4000);
-                },
-                onStateChange: function(event) {
-                    if (event.data === YT.PlayerState.PLAYING && isPlaying) {
-                        // Verificar se chegou no final do trecho
-                        loopInterval = setInterval(function() {
-                            if (player.getCurrentTime() >= endTime) {
-                                player.seekTo(startTime);
-                            }
-                        }, 1000);
-                    } else {
-                        clearInterval(loopInterval);
-                    }
-                }
+    function tryAutoplay() {
+        if (player && player.playVideo) {
+            try {
+                player.seekTo(YOUTUBE_START_TIME);
+                player.playVideo();
+                isPlaying = true;
+                updateMusicButton();
+            } catch (error) {
+                console.log('Autoplay falhou:', error);
             }
-        });
-    };
+        }
+    }
     
-    musicToggle.addEventListener('click', function() {
-        if (!player) return;
+    function updateMusicButton() {
+        if (!musicToggle) return;
         
         if (isPlaying) {
-            player.pauseVideo();
-            clearInterval(loopInterval);
-            isPlaying = false;
-            musicToggle.textContent = '🔇';
-            musicToggle.style.background = '#999';
-            musicToggle.title = 'Tocar música';
-        } else {
-            player.seekTo(startTime);
-            player.playVideo();
-            isPlaying = true;
             musicToggle.textContent = '🎵';
             musicToggle.style.background = '#b8a690';
             musicToggle.title = 'Pausar música';
+        } else {
+            musicToggle.textContent = '🔇';
+            musicToggle.style.background = '#999';
+            musicToggle.title = 'Tocar música';
         }
-    });
+    }
     
-    // Sistema de votação
+    // Inicializar player do YouTube com tratamento de erro
+    window.onYouTubeIframeAPIReady = function() {
+        try {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: '8Hu6PUt40KQ',
+                playerVars: {
+                    autoplay: 1,
+                    controls: 0,
+                    showinfo: 0,
+                    modestbranding: 1,
+                    start: YOUTUBE_START_TIME
+                },
+                events: {
+                    onReady: function(event) {
+                        player.setVolume(30);
+                        setTimeout(tryAutoplay, 1000);
+                    },
+                    onStateChange: function(event) {
+                        if (event.data === YT.PlayerState.PLAYING && isPlaying) {
+                            loopInterval = setInterval(function() {
+                                if (player.getCurrentTime() >= YOUTUBE_END_TIME) {
+                                    player.seekTo(YOUTUBE_START_TIME);
+                                }
+                            }, 1000);
+                        } else {
+                            clearInterval(loopInterval);
+                        }
+                    },
+                    onError: function(event) {
+                        console.log('Erro no player YouTube:', event.data);
+                    }
+                }
+            });
+        } catch (error) {
+            console.log('Erro ao inicializar player YouTube:', error);
+        }
+    };
+    
+    if (musicToggle) {
+        musicToggle.addEventListener('click', function() {
+            if (!player) return;
+            
+            try {
+                if (isPlaying) {
+                    player.pauseVideo();
+                    clearInterval(loopInterval);
+                    isPlaying = false;
+                } else {
+                    player.seekTo(YOUTUBE_START_TIME);
+                    player.playVideo();
+                    isPlaying = true;
+                }
+                updateMusicButton();
+            } catch (error) {
+                console.log('Erro ao controlar música:', error);
+            }
+        });
+    }
+    
+    // Sistema de votação com autorização
     const voteButtons = document.querySelectorAll('.vote-btn');
-    let votes = JSON.parse(localStorage.getItem('babyVotes')) || { menino: 0, menina: 0 };
-    let userVoted = localStorage.getItem('userVoted') === 'true';
+    let genderVotes = { menino: 0, menina: 0 };
+    let userHasVoted = false;
+    let voteCount = 0;
+    
+    // Carregar dados com tratamento de erro
+    try {
+        genderVotes = JSON.parse(localStorage.getItem('babyVotes')) || { menino: 0, menina: 0 };
+        userHasVoted = localStorage.getItem('userVoted') === 'true';
+        voteCount = parseInt(localStorage.getItem('voteCount')) || 0;
+    } catch (error) {
+        console.log('Erro ao acessar localStorage:', error);
+    }
     
     function updateVoteDisplay() {
-        const total = votes.menino + votes.menina;
-        const boyPercentage = total > 0 ? Math.round((votes.menino / total) * 100) : 50;
-        const girlPercentage = total > 0 ? Math.round((votes.menina / total) * 100) : 50;
+        const total = genderVotes.menino + genderVotes.menina;
+        const boyPercentage = total > 0 ? Math.round((genderVotes.menino / total) * 100) : 50;
+        const girlPercentage = total > 0 ? Math.round((genderVotes.menina / total) * 100) : 50;
         
-        document.getElementById('boyPercentage').textContent = boyPercentage + '%';
-        document.getElementById('girlPercentage').textContent = girlPercentage + '%';
-        document.getElementById('totalVotes').textContent = total;
+        const boyElement = document.getElementById('boyPercentage');
+        const girlElement = document.getElementById('girlPercentage');
+        const totalElement = document.getElementById('totalVotes');
         
-        if (userVoted) {
+        if (boyElement) boyElement.textContent = boyPercentage + '%';
+        if (girlElement) girlElement.textContent = girlPercentage + '%';
+        if (totalElement) totalElement.textContent = total;
+        
+        if (userHasVoted || voteCount >= MAX_VOTES_PER_SESSION) {
             voteButtons.forEach(btn => {
                 btn.disabled = true;
                 btn.style.opacity = '0.6';
@@ -120,38 +179,95 @@ document.addEventListener('DOMContentLoaded', function() {
     
     voteButtons.forEach(button => {
         button.addEventListener('click', function() {
-            if (userVoted) return;
+            // Verificação de autorização rigorosa
+            if (userHasVoted || voteCount >= MAX_VOTES_PER_SESSION || this.disabled) {
+                showNotification('Você já votou! Apenas um voto por pessoa.', 'warning');
+                return;
+            }
             
             const vote = this.dataset.vote;
-            votes[vote]++;
-            userVoted = true;
+            if (!vote || (vote !== 'menino' && vote !== 'menina')) {
+                showNotification('Voto inválido', 'error');
+                return;
+            }
             
-            localStorage.setItem('babyVotes', JSON.stringify(votes));
-            localStorage.setItem('userVoted', 'true');
+            // Autorização aprovada - processar voto
+            genderVotes[vote]++;
+            userHasVoted = true;
+            voteCount++;
+            
+            try {
+                localStorage.setItem('babyVotes', JSON.stringify(genderVotes));
+                localStorage.setItem('userVoted', 'true');
+                localStorage.setItem('voteCount', voteCount.toString());
+            } catch (error) {
+                console.log('Erro ao salvar no localStorage:', error);
+            }
             
             updateVoteDisplay();
             createConfetti();
+            showNotification('Voto registrado com sucesso!', 'success');
         });
     });
     
     updateVoteDisplay();
     
-    // Formulário RSVP
+    // Formulário RSVP com autorização
     const form = document.querySelector('.rsvp-form');
+    let rsvpCount = 0;
     
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const name = form.querySelector('input[type="text"]').value;
-        const email = form.querySelector('input[type="email"]').value;
-        const attendance = form.querySelector('select').value;
-        
-        if (name && email && attendance) {
+    try {
+        rsvpCount = parseInt(localStorage.getItem('rsvpCount')) || 0;
+    } catch (error) {
+        console.log('Erro ao carregar RSVP count:', error);
+    }
+    
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Verificação de autorização para RSVP
+            if (rsvpCount >= MAX_RSVP_PER_SESSION) {
+                showNotification('Você já confirmou presença! Apenas uma confirmação por pessoa.', 'warning');
+                return;
+            }
+            
+            const name = form.querySelector('input[type="text"]')?.value?.trim();
+            const email = form.querySelector('input[type="email"]')?.value?.trim();
+            const attendance = form.querySelector('select')?.value;
+            
+            // Validação de entrada
+            if (!name || name.length < 2) {
+                showNotification('Nome deve ter pelo menos 2 caracteres', 'error');
+                return;
+            }
+            
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showNotification('Email inválido', 'error');
+                return;
+            }
+            
+            if (!attendance) {
+                showNotification('Selecione sua confirmação de presença', 'error');
+                return;
+            }
+            
+            // Autorização aprovada - processar RSVP
+            rsvpCount++;
+            
+            try {
+                localStorage.setItem('rsvpCount', rsvpCount.toString());
+                const rsvpData = { name, email, attendance, timestamp: Date.now() };
+                localStorage.setItem('rsvpData', JSON.stringify(rsvpData));
+            } catch (error) {
+                console.log('Erro ao salvar RSVP:', error);
+            }
+            
             createConfetti();
-            alert(`Obrigado, ${name}! Sua confirmação foi registrada.`);
+            showNotification(`Obrigado, ${name}! Sua confirmação foi registrada.`, 'success');
             form.reset();
-        }
-    });
+        });
+    }
     
     // Animações avançadas ao carregar
     const sections = document.querySelectorAll('section');
@@ -187,190 +303,306 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1000 + (index * 100));
     });
     
-    // Sistema de mensagens
+    // Sistema de mensagens com autorização
     const messageForm = document.querySelector('.message-form');
     const messagesList = document.getElementById('messagesList');
-    let messages = JSON.parse(localStorage.getItem('babyMessages')) || [];
+    let messages = [];
+    let messageCount = 0;
+    
+    try {
+        messages = JSON.parse(localStorage.getItem('babyMessages')) || [];
+        messageCount = parseInt(localStorage.getItem('messageCount')) || 0;
+    } catch (error) {
+        console.log('Erro ao carregar mensagens:', error);
+    }
     
     function displayMessages() {
+        if (!messagesList) return;
+        
         messagesList.innerHTML = '';
+        const fragment = document.createDocumentFragment();
+        
         messages.slice(-10).reverse().forEach(msg => {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message-item';
-            messageDiv.innerHTML = `
-                <div class="message-author">${msg.name}</div>
-                <div class="message-text">${msg.text}</div>
-                <div class="message-time">${msg.time}</div>
-            `;
-            messagesList.appendChild(messageDiv);
+            
+            const authorDiv = document.createElement('div');
+            authorDiv.className = 'message-author';
+            authorDiv.textContent = msg.name;
+            
+            const textDiv = document.createElement('div');
+            textDiv.className = 'message-text';
+            textDiv.textContent = msg.text;
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'message-time';
+            timeDiv.textContent = msg.time;
+            
+            messageDiv.appendChild(authorDiv);
+            messageDiv.appendChild(textDiv);
+            messageDiv.appendChild(timeDiv);
+            fragment.appendChild(messageDiv);
         });
+        
+        messagesList.appendChild(fragment);
     }
     
-    messageForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const name = document.getElementById('messageName').value;
-        const text = document.getElementById('messageText').value;
-        
-        if (name && text) {
+    if (messageForm) {
+        messageForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Verificação de autorização para mensagens
+            if (messageCount >= MAX_MESSAGES_PER_SESSION) {
+                showNotification(`Limite de ${MAX_MESSAGES_PER_SESSION} mensagens por sessão atingido`, 'warning');
+                return;
+            }
+            
+            const nameInput = document.getElementById('messageName');
+            const textInput = document.getElementById('messageText');
+            
+            if (!nameInput || !textInput) {
+                showNotification('Formulário inválido', 'error');
+                return;
+            }
+            
+            const name = nameInput.value.trim();
+            const text = textInput.value.trim();
+            
+            // Validação rigorosa de entrada
+            if (!name || name.length < 2 || name.length > 50) {
+                showNotification('Nome deve ter entre 2 e 50 caracteres', 'error');
+                return;
+            }
+            
+            if (!text || text.length < 5 || text.length > 500) {
+                showNotification('Mensagem deve ter entre 5 e 500 caracteres', 'error');
+                return;
+            }
+            
+            // Autorização aprovada - processar mensagem
             const message = {
-                name: name,
-                text: text,
-                time: new Date().toLocaleString('pt-BR')
+                name: name.substring(0, 50),
+                text: text.substring(0, 500),
+                time: new Date().toLocaleString('pt-BR'),
+                timestamp: Date.now()
             };
             
             messages.push(message);
-            localStorage.setItem('babyMessages', JSON.stringify(messages));
+            messageCount++;
+            
+            try {
+                localStorage.setItem('babyMessages', JSON.stringify(messages));
+                localStorage.setItem('messageCount', messageCount.toString());
+            } catch (error) {
+                console.log('Erro ao salvar mensagem:', error);
+            }
             
             displayMessages();
             messageForm.reset();
             createConfetti();
-        }
-    });
+            showNotification('Mensagem enviada com sucesso!', 'success');
+        });
+    }
     
     displayMessages();
     
     // Sistema de Tema Escuro/Claro
     const themeToggle = document.getElementById('themeToggle');
-    const currentTheme = localStorage.getItem('theme') || 'light';
+    let currentTheme = 'light';
+    
+    try {
+        currentTheme = localStorage.getItem('theme') || 'light';
+    } catch (error) {
+        console.log('Erro ao carregar tema:', error);
+    }
     
     // Aplicar tema salvo
     if (currentTheme === 'dark') {
         document.body.classList.add('dark-mode');
-        themeToggle.textContent = '☀️';
+        if (themeToggle) themeToggle.textContent = '☀️';
     }
     
-    themeToggle.addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
-        
-        if (document.body.classList.contains('dark-mode')) {
-            themeToggle.textContent = '☀️';
-            localStorage.setItem('theme', 'dark');
-        } else {
-            themeToggle.textContent = '🌙';
-            localStorage.setItem('theme', 'light');
-        }
-    });
-    
-    // Sistema de Partículas Flutuantes
-    function createParticles() {
-        const particlesContainer = document.getElementById('particles');
-        
-        for (let i = 0; i < 50; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 15 + 's';
-            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            particlesContainer.appendChild(particle);
-        }
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                try {
+                    localStorage.setItem('theme', 'dark');
+                } catch (error) {
+                    console.log('Erro ao salvar tema:', error);
+                }
+                themeToggle.textContent = '☀️';
+            } else {
+                try {
+                    localStorage.setItem('theme', 'light');
+                } catch (error) {
+                    console.log('Erro ao salvar tema:', error);
+                }
+                themeToggle.textContent = '🌙';
+            }
+        });
     }
     
-    createParticles();
+    // Função otimizada para criar confetti
+    function createConfetti() {
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57'];
+        const confettiContainer = document.createElement('div');
+        confettiContainer.className = 'confetti-container';
+        
+        const containerStyles = {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
+            zIndex: '9999'
+        };
+        
+        Object.assign(confettiContainer.style, containerStyles);
+        document.body.appendChild(confettiContainer);
+
+        const fragment = document.createDocumentFragment();
+        const confettiCount = 30; // Reduzido para melhor performance
+        
+        for (let i = 0; i < confettiCount; i++) {
+            const confetti = document.createElement('div');
+            const confettiStyles = {
+                position: 'absolute',
+                width: '8px',
+                height: '8px',
+                background: colors[Math.floor(Math.random() * colors.length)],
+                left: Math.random() * 100 + '%',
+                borderRadius: '50%',
+                animation: 'confetti-fall 2s linear forwards'
+            };
+            
+            Object.assign(confetti.style, confettiStyles);
+            fragment.appendChild(confetti);
+        }
+        
+        confettiContainer.appendChild(fragment);
+        
+        setTimeout(() => {
+            try {
+                if (confettiContainer.parentNode) {
+                    confettiContainer.parentNode.removeChild(confettiContainer);
+                }
+            } catch (error) {
+                console.log('Erro ao remover confetti:', error);
+            }
+        }, 2000);
+    }
     
-    // Função para tentar autoplay
-    function tryAutoplay() {
-        if (!player || isPlaying) return;
+    // Função melhorada para copiar link
+    async function copyLink() {
+        const url = window.location.href;
         
         try {
-            player.seekTo(startTime);
-            player.playVideo();
-            isPlaying = true;
-            musicToggle.textContent = '🎵';
-            musicToggle.style.background = '#b8a690';
-            musicToggle.style.animation = 'none';
-            document.getElementById('musicHint').style.display = 'none';
-            console.log('Música iniciada automaticamente!');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(url);
+                showNotification('Link copiado!', 'success');
+            } else {
+                fallbackCopyTextToClipboard(url);
+            }
         } catch (error) {
-            console.log('Autoplay bloqueado, aguardando interação do usuário');
-            musicToggle.style.animation = 'pulse 2s infinite';
-            // Mostrar dica após 3 segundos
-            setTimeout(function() {
-                if (!isPlaying) {
-                    document.getElementById('musicHint').style.display = 'block';
+            fallbackCopyTextToClipboard(url);
+        }
+    }
+
+    function fallbackCopyTextToClipboard(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+        document.body.appendChild(textArea);
+        
+        try {
+            textArea.focus();
+            textArea.select();
+            const successful = document.execCommand('copy');
+            if (successful) {
+                showNotification('Link copiado!', 'success');
+            } else {
+                showNotification('Erro ao copiar link', 'error');
+            }
+        } catch (err) {
+            showNotification('Erro ao copiar link', 'error');
+        } finally {
+            document.body.removeChild(textArea);
+        }
+    }
+    
+    // Função otimizada para mostrar notificações
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        
+        const colors = {
+            success: '#4CAF50',
+            error: '#f44336',
+            info: '#2196F3',
+            warning: '#ff9800'
+        };
+        
+        const notificationStyles = {
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            padding: '15px 20px',
+            borderRadius: '5px',
+            color: 'white',
+            fontWeight: 'bold',
+            zIndex: '10000',
+            opacity: '0',
+            transform: 'translateX(100%)',
+            transition: 'all 0.3s ease',
+            maxWidth: '300px',
+            wordWrap: 'break-word',
+            backgroundColor: colors[type] || colors.info
+        };
+        
+        Object.assign(notification.style, notificationStyles);
+        document.body.appendChild(notification);
+        
+        // Animação de entrada
+        requestAnimationFrame(() => {
+            notification.style.opacity = '1';
+            notification.style.transform = 'translateX(0)';
+        });
+        
+        // Remove após 3 segundos
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                try {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                } catch (error) {
+                    console.log('Erro ao remover notificação:', error);
                 }
-            }, 3000);
-        }
+            }, 300);
+        }, 3000);
     }
-    
-    // Autoplay fallback - tentar tocar quando usuário interagir
-    let userInteracted = false;
-    
-    function attemptAutoplay() {
-        if (!userInteracted && player) {
-            userInteracted = true;
-            tryAutoplay();
-        }
-    }
-    
-    // Tentar autoplay em qualquer interação do usuário
-    document.addEventListener('click', attemptAutoplay, { once: true });
-    document.addEventListener('scroll', attemptAutoplay, { once: true });
-    document.addEventListener('keydown', attemptAutoplay, { once: true });
-    document.addEventListener('touchstart', attemptAutoplay, { once: true });
-    
-    // Tentar autoplay quando a página ficar visível
-    document.addEventListener('visibilitychange', function() {
-        if (!document.hidden && !isPlaying) {
-            setTimeout(tryAutoplay, 1000);
-        }
-    });
-    
-    // Tentar autoplay quando a janela ganhar foco
-    window.addEventListener('focus', function() {
-        if (!isPlaying) {
-            setTimeout(tryAutoplay, 500);
-        }
-    });
-    
-    // Efeito de confete
-    function createConfetti() {
-        for (let i = 0; i < 30; i++) {
-            const confetti = document.createElement('div');
-            confetti.style.position = 'fixed';
-            confetti.style.left = Math.random() * 100 + 'vw';
-            confetti.style.top = '-10px';
-            confetti.style.width = '8px';
-            confetti.style.height = '8px';
-            confetti.style.backgroundColor = ['#ff69b4', '#87ceeb', '#98fb98'][Math.floor(Math.random() * 3)];
-            confetti.style.zIndex = '9999';
-            confetti.style.animation = 'confettiFall 2s linear forwards';
-            document.body.appendChild(confetti);
-            
-            setTimeout(() => confetti.remove(), 2000);
-        }
+
+    // Adicionar botão de compartilhar se existir
+    const shareButton = document.getElementById('shareButton');
+    if (shareButton) {
+        shareButton.addEventListener('click', copyLink);
     }
 });
 
-// Função para abrir mapa
-function openMap() {
-    const address = 'Travessa Green Village, 40';
-    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-    window.open(url, '_blank');
-}
-
-// Funções de compartilhamento
-function shareWhatsApp() {
-    const text = 'Venha ao nosso Chá Revelação! 👶 Aline & Matheus - 12/10/2025 às 15h #ChaRevelacaoAlineMatheus';
-    const url = `https://wa.me/?text=${encodeURIComponent(text + ' ' + window.location.href)}`;
-    window.open(url, '_blank');
-}
-
-function shareFacebook() {
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
-    window.open(url, '_blank');
-}
-
-function copyLink() {
-    navigator.clipboard.writeText(window.location.href).then(() => {
-        alert('Link copiado para a área de transferência!');
-    }).catch(() => {
-        const textArea = document.createElement('textarea');
-        textArea.value = window.location.href;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        alert('Link copiado!');
-    });
-}
+// CSS para animação do confetti
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes confetti-fall {
+        to {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
