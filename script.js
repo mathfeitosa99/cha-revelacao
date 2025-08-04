@@ -9,16 +9,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Contador regressivo otimizado
     let countdownInterval;
-    let isTabVisible = true;
     
     function updateCountdown() {
-        if (!isTabVisible) return;
-        
         const now = new Date().getTime();
         const distance = EVENT_DATE - now;
         
         if (distance < 0) {
-            document.querySelector('.countdown-timer').innerHTML = '<h2>O evento começou!</h2>';
+            const timer = document.querySelector('.countdown-timer');
+            if (timer) timer.innerHTML = '<h2>O evento começou!</h2>';
             clearInterval(countdownInterval);
             return;
         }
@@ -33,19 +31,31 @@ document.addEventListener('DOMContentLoaded', function() {
         const minutesEl = document.getElementById('minutes');
         const secondsEl = document.getElementById('seconds');
         
-        if (daysEl) daysEl.textContent = days.toString().padStart(2, '0');
-        if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
-        if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
-        if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
+        if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+        if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+        if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+        if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
     }
     
-    // Controle de visibilidade da aba
-    document.addEventListener('visibilitychange', function() {
-        isTabVisible = !document.hidden;
-    });
+
     
-    updateCountdown();
-    countdownInterval = setInterval(updateCountdown, 1000);
+    // Inicializar contagem regressiva com verificação
+    function initCountdown() {
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        
+        if (daysEl && hoursEl && minutesEl && secondsEl) {
+            updateCountdown();
+            countdownInterval = setInterval(updateCountdown, 1000);
+        } else {
+            // Tentar novamente em 100ms se elementos não estão prontos
+            setTimeout(initCountdown, 100);
+        }
+    }
+    
+    initCountdown();
     
     // Controle de música YouTube otimizado
     const musicToggle = document.getElementById('musicToggle');
