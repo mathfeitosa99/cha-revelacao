@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Chá Revelação</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-card.confirmed {
+            background: linear-gradient(135deg, #00d2d3, #54a0ff);
+        }
+        
+        .stat-card.declined {
+            background: linear-gradient(135deg, #ff9ff3, #f368e0);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .guest-list {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .guest-list h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .guest-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #ddd;
+        }
+        
+        .guest-item.confirmed {
+            border-left-color: #00d2d3;
+        }
+        
+        .guest-item.declined {
+            border-left-color: #ff6b6b;
+        }
+        
+        .guest-name {
+            font-weight: bold;
+        }
+        
+        .guest-status {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-declined {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .export-data {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .export-data textarea {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 Painel Administrativo - Chá Revelação</h1>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalGuests">0</div>
+                <div>Total de Convidados</div>
+            </div>
+            <div class="stat-card confirmed">
+                <div class="stat-number" id="confirmedCount">0</div>
+                <div>Confirmados</div>
+            </div>
+            <div class="stat-card declined">
+                <div class="stat-number" id="declinedCount">0</div>
+                <div>Recusaram</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="pendingCount">0</div>
+                <div>Pendentes</div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button class="btn btn-primary" onclick="refreshData()">🔄 Atualizar</button>
+            <button class="btn btn-danger" onclick="clearData()">🗑️ Limpar Dados</button>
+            <button class="btn btn-primary" onclick="exportData()">📊 Exportar</button>
+        </div>
+        
+        <div class="guest-list">
+            <h2>📋 Lista de Convidados</h2>
+            <div id="guestsList"></div>
+        </div>
+        
+        <div class="export-data" id="exportSection" style="display: none;">
+            <h3>📊 Dados para Exportação</h3>
+            <textarea id="exportData" readonly></textarea>
+        </div>
+    </div>
+
+    <script>
+        // Lista de convidados (deve ser a mesma do script.js)
+        const GUEST_LIST = [
+            'João Silva',
+            'Maria Santos',
+            'Pedro Oliveira',
+            'Ana Costa',
+            'Carlos Ferreira'
+            // Adicione os mesmos nomes do script.js
+        ];
+
+        function normalizeName(name) {
+            return name.toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .trim();
+        }
+
+        function loadData() {
+            let confirmedGuests = [];
+            try {
+                confirmedGuests = JSON.parse(localStorage.getItem('confirmedGuests')) || [];
+            } catch (error) {
+                console.log('Erro ao carregar dados:', error);
+            }
+            return confirmedGuests;
+        }
+
+        function updateStats() {
+            const confirmedGuests = loadData();
+            const confirmed = confirmedGuests.filter(g => g.attendance === 'sim').length;
+            const declined = confirmedGuests.filter(g => g.attendance === 'nao').length;
+            const pending = GUEST_LIST.length - confirmedGuests.length;
+
+            document.getElementById('totalGuests').textContent = GUEST_LIST.length;
+            document.getElementById('confirmedCount').textContent = confirmed;
+            document.getElementById('declinedCount').textContent = declined;
+            document.getElementById('pendingCount').textContent = pending;
+        }
+
+        function renderGuestList() {
+            const confirmedGuests = loadData();
+            const guestsList = document.getElementById('guestsList');
+            
+            let html = '';
+            
+            GUEST_LIST.forEach(guestName => {
+                const confirmed = confirmedGuests.find(g => 
+                    normalizeName(g.name) === normalizeName(guestName)
+                );
+                
+                let statusClass = 'pending';
+                let statusText = 'Pendente';
+                let itemClass = '';
+                
+                if (confirmed) {
+                    if (confirmed.attendance === 'sim') {
+                        statusClass = 'confirmed';
+                        statusText = 'Confirmado';
+                        itemClass = 'confirmed';
+                    } else {
+                        statusClass = 'declined';
+                        statusText = 'Recusou';
+                        itemClass = 'declined';
+                    }
+                }
+                
+                html += `
+                    <div class="guest-item ${itemClass}">
+                        <div>
+                            <div class="guest-name">${guestName}</div>
+                            ${confirmed ? `<small>${confirmed.email} - ${confirmed.timestamp}</small>` : ''}
+                        </div>
+                        <span class="guest-status status-${statusClass}">${statusText}</span>
+                    </div>
+                `;
+            });
+            
+            guestsList.innerHTML = html;
+        }
+
+        function refreshData() {
+            updateStats();
+            renderGuestList();
+        }
+
+        function clearData() {
+            if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
+                localStorage.removeItem('confirmedGuests');
+                localStorage.removeItem('babyVotes');
+                localStorage.removeItem('babyMessages');
+                localStorage.removeItem('userVoted');
+                localStorage.removeItem('voteCount');
+                localStorage.removeItem('messageCount');
+                refreshData();
+                alert('Dados limpos com sucesso!');
+            }
+        }
+
+        function exportData() {
+            const confirmedGuests = loadData();
+            const exportSection = document.getElementById('exportSection');
+            const exportData = document.getElementById('exportData');
+            
+            let csvData = 'Nome,Email,Status,Data/Hora\n';
+            
+            GUEST_LIST.forEach(guestName => {
+                const confirmed = confirmedGuests.find(g => 
+                    normalizeName(g.name) === normalizeName(guestName)
+                );
+                
+                if (confirmed) {
+                    const status = confirmed.attendance === 'sim' ? 'Confirmado' : 'Recusou';
+                    csvData += `"${confirmed.name}","${confirmed.email}","${status}","${confirmed.timestamp}"\n`;
+                } else {
+                    csvData += `"${guestName}","","Pendente",""\n`;
+                }
+            });
+            
+            exportData.value = csvData;
+            exportSection.style.display = 'block';
+        }
+
+        // Inicializar
+        refreshData();
+        
+        // Atualizar automaticamente a cada 30 segundos
+        setInterval(refreshData, 30000);
+    </script>
+</body>
+</html>

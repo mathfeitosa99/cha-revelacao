@@ -1,11 +1,38 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Constantes
-    const EVENT_DATE = new Date(2025, 9, 28, 15, 0, 0).getTime(); // Mês 8 = setembro (0-indexado)
+    const EVENT_DATE = new Date(2025, 8, 28, 15, 0, 0).getTime(); // Mês 8 = setembro (0-indexado)
     const YOUTUBE_START_TIME = 124;
     const YOUTUBE_END_TIME = 240;
     const MAX_VOTES_PER_SESSION = 1;
     const MAX_MESSAGES_PER_SESSION = 3;
     const MAX_RSVP_PER_SESSION = 1;
+    
+    // Banco de dados de convidados
+    const GUEST_LIST = [
+        // Adicione aqui os nomes dos convidados
+        'João Silva',
+        'Maria Santos',
+        'Pedro Oliveira',
+        'Ana Costa',
+        'Carlos Ferreira'
+        // Você pode adicionar mais nomes aqui
+    ];
+    
+    // Função para normalizar nomes (remove acentos e converte para minúsculo)
+    function normalizeName(name) {
+        return name.toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .trim();
+    }
+    
+    // Função para verificar se o nome está na lista
+    function isValidGuest(inputName) {
+        const normalizedInput = normalizeName(inputName);
+        return GUEST_LIST.some(guestName => 
+            normalizeName(guestName) === normalizedInput
+        );
+    }
     
     // Contador regressivo otimizado
     let countdownInterval;
@@ -222,25 +249,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
     updateVoteDisplay();
     
-    // Formulário RSVP com autorização
+    // Sistema de RSVP com validação de convidados
     const form = document.querySelector('.rsvp-form');
-    let rsvpCount = 0;
+    let confirmedGuests = [];
     
     try {
-        rsvpCount = parseInt(localStorage.getItem('rsvpCount')) || 0;
+        confirmedGuests = JSON.parse(localStorage.getItem('confirmedGuests')) || [];
     } catch (error) {
-        console.log('Erro ao carregar RSVP count:', error);
+        console.log('Erro ao carregar convidados confirmados:', error);
+    }
+    
+    function hasGuestConfirmed(name) {
+        return confirmedGuests.some(guest => 
+            normalizeName(guest.name) === normalizeName(name)
+        );
     }
     
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // Verificação de autorização para RSVP
-            if (rsvpCount >= MAX_RSVP_PER_SESSION) {
-                showNotification('Você já confirmou presença! Apenas uma confirmação por pessoa.', 'warning');
-                return;
-            }
             
             const name = form.querySelector('input[type="text"]')?.value?.trim();
             const email = form.querySelector('input[type="email"]')?.value?.trim();
@@ -249,6 +276,18 @@ document.addEventListener('DOMContentLoaded', function() {
             // Validação de entrada
             if (!name || name.length < 2) {
                 showNotification('Nome deve ter pelo menos 2 caracteres', 'error');
+                return;
+            }
+            
+            // Verificar se o nome está na lista de convidados
+            if (!isValidGuest(name)) {
+                showNotification('Nome não encontrado na lista de convidados. Verifique a grafia.', 'error');
+                return;
+            }
+            
+            // Verificar se já confirmou
+            if (hasGuestConfirmed(name)) {
+                showNotification('Este convidado já confirmou presença!', 'warning');
                 return;
             }
             
@@ -262,22 +301,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Autorização aprovada - processar RSVP
-            rsvpCount++;
+            // Salvar confirmação
+            const guestData = {
+                name: name,
+                email: email,
+                attendance: attendance,
+                timestamp: new Date().toLocaleString('pt-BR')
+            };
+            
+            confirmedGuests.push(guestData);
             
             try {
-                localStorage.setItem('rsvpCount', rsvpCount.toString());
-                const rsvpData = { name, email, attendance, timestamp: Date.now() };
-                localStorage.setItem('rsvpData', JSON.stringify(rsvpData));
+                localStorage.setItem('confirmedGuests', JSON.stringify(confirmedGuests));
             } catch (error) {
-                console.log('Erro ao salvar RSVP:', error);
+                console.log('Erro ao salvar confirmação:', error);
             }
             
             createConfetti();
             showNotification(`Obrigado, ${name}! Sua confirmação foi registrada.`, 'success');
             form.reset();
         });
-    }
+    }penas uma confirmação por pessoa.', 'warning');
+
     
     // Animações avançadas ao carregar
     const sections = document.querySelectorAll('section');
