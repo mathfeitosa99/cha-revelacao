@@ -1,3 +1,9 @@
+const GUEST_LIST = [
+    'João Silva',
+    'Maria Santos',
+    'Pedro Oliveira',
+    // Adicione todos os seus convidados aqui
+];
 * {
     margin: 0;
     padding: 0;
