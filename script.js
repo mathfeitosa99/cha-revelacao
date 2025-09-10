@@ -131,6 +131,16 @@ function initRSVP() {
       const list = JSON.parse(localStorage.getItem('rsvpConfirmations') || '[]');
       list.push(data);
       localStorage.setItem('rsvpConfirmations', JSON.stringify(list));
+      // Enviar também para Netlify Forms (centralizado no dashboard)
+      postRSVPToNetlify({
+        "form-name": 'rsvp',
+        guestName: data.name,
+        guestPhone: data.phone,
+        guestAttendance: data.attendance,
+        guestCount: String(data.count),
+        timestamp: data.timestamp,
+        date: data.date
+      });
       form.reset();
       if (attendance) attendance.dispatchEvent(new Event('change'));
       showNotification('Confirmação registrada. Obrigado!', 'success');
@@ -138,6 +148,18 @@ function initRSVP() {
       showNotification('Falha ao salvar confirmação.', 'error');
     }
   });
+}
+
+// Envio assíncrono para Netlify Forms
+function postRSVPToNetlify(fields) {
+  try {
+    const body = new URLSearchParams(fields).toString();
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body
+    }).catch(() => {});
+  } catch (e) { /* ignora erros de rede */ }
 }
 
 // ========== Galeria ==========

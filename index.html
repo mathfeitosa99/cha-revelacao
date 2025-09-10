@@ -99,7 +99,11 @@
       <div class="content content-box">
         <h3>✅ Confirme sua Presença</h3>
         <p>Ajude-nos a organizar o evento! Confirme se você virá:</p>
-        <form class="rsvp-form" id="rsvpForm">
+        <form class="rsvp-form" id="rsvpForm" name="rsvp" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="rsvp">
+          <p style="display:none">
+            <label>Não preencha: <input name="bot-field"></label>
+          </p>
           <div class="form-group">
             <label for="guestName">Seu nome completo:</label>
             <input type="text" id="guestName" name="guestName" placeholder="Digite seu nome completo" required>
