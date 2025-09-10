@@ -227,8 +227,21 @@ function initParticles() {
 }
 
 // ========== Ações auxiliares ==========
+function isIOS() {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  const iOSClassic = /iPad|iPhone|iPod/.test(ua);
+  const iOS13Plus = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+  return iOSClassic || iOS13Plus;
+}
+
 window.openMap = function openMap() {
-  window.open('https://maps.google.com/?q=Tv.+Green+Village,+40+-+Capela+Velha,+Arauc%C3%A1ria+-+PR', '_blank');
+  const address = 'Tv. Green Village, 40 - Capela Velha, Araucária - PR';
+  const url = isIOS()
+    ? `https://maps.apple.com/?q=${encodeURIComponent(address)}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+
+  const w = window.open(url, '_blank', 'noopener,noreferrer');
+  if (!w) window.location.href = url; // Fallback se popup for bloqueado
 };
 
 window.addToCalendar = function addToCalendar() {
@@ -237,6 +250,42 @@ window.addToCalendar = function addToCalendar() {
   const title = 'Chá Revelação - Aline & Matheus';
   const location = 'Tv. Green Village, 40 - Capela Velha, Araucária - PR';
   const details = 'Venha descobrir conosco se nosso bebê será um menino ou uma menina!';
+
+  if (isIOS()) {
+    // iOS: oferecer .ics (Apple Calendar)
+    const ics = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Convite Cha Revelacao//PT-BR',
+      'BEGIN:VEVENT',
+      `DTSTART:${startDate}`,
+      `DTEND:${endDate}`,
+      `SUMMARY:${title}`,
+      `LOCATION:${location}`,
+      `DESCRIPTION:${details}`,
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+    try {
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'cha-revelacao.ics';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      // Fallback: abrir dado inline
+      const url = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+      window.location.href = url;
+    }
+    return;
+  }
+
+  // Android/desktop: Google Calendar
   const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startDate}/${endDate}&location=${encodeURIComponent(location)}&details=${encodeURIComponent(details)}`;
-  window.open(url, '_blank');
+  const w = window.open(url, '_blank', 'noopener,noreferrer');
+  if (!w) window.location.href = url;
 };
