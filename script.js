@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
   initGallery();
   initAnimations();
   initParticles();
+
+  // Bind de botões (evitar inline handlers por CSP)
+  const mapBtn = document.getElementById('btnOpenMap');
+  if (mapBtn) mapBtn.addEventListener('click', openMap);
+  const calBtn = document.getElementById('btnAddCalendar');
+  if (calBtn) calBtn.addEventListener('click', addToCalendar);
 });
 
 // Tema removido a pedido
@@ -266,21 +272,16 @@ window.addToCalendar = function addToCalendar() {
       'END:VEVENT',
       'END:VCALENDAR'
     ].join('\r\n');
-    try {
-      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'cha-revelacao.ics';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      // Fallback: abrir dado inline
-      const url = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
-      window.location.href = url;
-    }
+    // Preferir Blob + download; evitar data: por CSP
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'cha-revelacao.ics';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
     return;
   }
 
