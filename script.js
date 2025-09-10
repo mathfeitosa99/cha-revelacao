@@ -5,47 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Inicializações
   initCountdown();
-  initVoting();
   initRSVP();
   initGallery();
-  initMessages();
   initAnimations();
   initParticles();
-
-  // Firebase opcional: iniciar e sincronizar
-  if (window.FirebaseSync && typeof window.FirebaseSync.init === 'function') {
-    window.FirebaseSync.init()
-      .then(() => window.FirebaseSync.syncExistingData && window.FirebaseSync.syncExistingData())
-      .finally(() => updateFirebaseStatus());
-  } else {
-    setTimeout(() => updateFirebaseStatus(), 1500);
-  }
 });
 
-// ========== Indicador de Status Firebase (opcional) ==========
-function updateFirebaseStatus() {
-  const statusDiv = document.getElementById('firebaseStatus');
-  const statusIcon = document.getElementById('firebaseStatusIcon');
-  const statusText = document.getElementById('firebaseStatusText');
-  if (!statusDiv || !statusIcon || !statusText) return;
+// Tema removido a pedido
 
-  statusDiv.style.display = 'flex';
-  const online = Boolean(window.FirebaseSync && typeof window.FirebaseSync.isEnabled === 'function' && window.FirebaseSync.isEnabled());
-
-  if (online) {
-    statusDiv.style.background = '#e8ffe8';
-    statusDiv.style.color = '#228B22';
-    statusIcon.textContent = '☁️';
-    statusText.textContent = 'Sincronização ativa (Firebase)';
-  } else {
-    statusDiv.style.background = '#fffbe8';
-    statusDiv.style.color = '#B8860B';
-    statusIcon.textContent = '⏳';
-    statusText.textContent = 'Modo offline (salvando no dispositivo)';
-  }
-
-  setTimeout(() => { statusDiv.style.display = 'none'; }, 4000);
-}
 
 // ========== Local data bootstrap ==========
 function safeInitLocalData() {
@@ -109,57 +76,7 @@ function initCountdown() {
   setInterval(update, 1000);
 }
 
-// ========== Votação ==========
-function initVoting() {
-  const voteButtons = document.querySelectorAll('.vote-btn');
-  let votes = JSON.parse(localStorage.getItem('babyVotes') || '{"menino":0,"menina":0}');
-
-  function render() {
-    const total = votes.menino + votes.menina;
-    const boyPct = total > 0 ? Math.round((votes.menino / total) * 100) : 50;
-    const girlPct = 100 - boyPct;
-
-    const boyBar = document.querySelector('.boy-bar');
-    const girlBar = document.querySelector('.girl-bar');
-    const boyEl = document.getElementById('boyPercentage');
-    const girlEl = document.getElementById('girlPercentage');
-    const totalEl = document.getElementById('totalVotes');
-
-    if (boyBar) boyBar.style.width = boyPct + '%';
-    if (girlBar) girlBar.style.width = girlPct + '%';
-    if (boyEl) boyEl.textContent = boyPct + '%';
-    if (girlEl) girlEl.textContent = girlPct + '%';
-    if (totalEl) totalEl.textContent = String(total);
-  }
-
-  voteButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const type = btn.dataset.vote;
-      if (!type || !votes.hasOwnProperty(type)) return;
-
-      // feedback
-      btn.classList.add('vote-btn--clicked');
-      setTimeout(() => btn.classList.remove('vote-btn--clicked'), 350);
-
-      votes[type] += 1;
-      localStorage.setItem('babyVotes', JSON.stringify(votes));
-      render();
-      if (window.FirebaseSync && typeof window.FirebaseSync.registerVote === 'function') {
-        window.FirebaseSync.registerVote(type)
-          .then(ok => { if (!ok) showNotification('Falha ao sincronizar voto com a nuvem.', 'error'); })
-          .catch(() => showNotification('Falha ao sincronizar voto com a nuvem.', 'error'));
-      }
-      const label = type === 'menino' ? 'Menino' : 'Menina';
-      showNotification(`Voto registrado: ${label}!`, 'success');
-    });
-  });
-
-  render();
-
-  // Atualização em tempo real (quando Firebase atualizar localStorage)
-  window.addEventListener('babyVotesUpdated', render);
-}
+// Votação removida
 
 // ========== RSVP ==========
 function initRSVP() {
@@ -208,11 +125,6 @@ function initRSVP() {
       const list = JSON.parse(localStorage.getItem('rsvpConfirmations') || '[]');
       list.push(data);
       localStorage.setItem('rsvpConfirmations', JSON.stringify(list));
-      if (window.FirebaseSync && typeof window.FirebaseSync.saveRSVP === 'function') {
-        window.FirebaseSync.saveRSVP(data)
-          .then(ok => { if (!ok) showNotification('Falha ao sincronizar confirmação com a nuvem.', 'error'); })
-          .catch(() => showNotification('Falha ao sincronizar confirmação com a nuvem.', 'error'));
-      }
       form.reset();
       if (attendance) attendance.dispatchEvent(new Event('change'));
       showNotification('Confirmação registrada. Obrigado!', 'success');
@@ -248,71 +160,7 @@ function initGallery() {
   }
 }
 
-// ========== Mural de Recados ==========
-function initMessages() {
-  const form = document.querySelector('.message-form');
-  const list = document.getElementById('messagesList');
-
-  function render() {
-    if (!list) return;
-    const messages = JSON.parse(localStorage.getItem('babyMessages') || '[]')
-      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-    if (!messages.length) {
-      list.innerHTML = '<p class="no-messages">Ainda não há recados ✨</p>';
-      return;
-    }
-
-    list.innerHTML = messages.map(m => `
-      <div class="message-item">
-        <div class="message-header">
-          <strong>${m.name}</strong>
-          <span class="message-date">${m.date}</span>
-        </div>
-        <div class="message-text">${m.text}</div>
-      </div>
-    `).join('');
-  }
-
-  render();
-
-  if (!form) return;
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = (document.getElementById('messageName')?.value || '').trim();
-    const text = (document.getElementById('messageText')?.value || '').trim();
-
-    if (name.length < 2 || text.length < 5) {
-      return showNotification('Preencha nome e mensagem (mín. 5 caracteres).', 'error');
-    }
-
-    const msg = {
-      name: name.replace(/[<>\"'&]/g, ''),
-      text: text.replace(/[<>\"'&]/g, ''),
-      timestamp: new Date().toISOString(),
-      date: new Date().toLocaleString('pt-BR')
-    };
-
-    try {
-      const arr = JSON.parse(localStorage.getItem('babyMessages') || '[]');
-      arr.push(msg);
-      localStorage.setItem('babyMessages', JSON.stringify(arr));
-      if (window.FirebaseSync && typeof window.FirebaseSync.saveMessage === 'function') {
-        window.FirebaseSync.saveMessage(msg)
-          .then(ok => { if (!ok) showNotification('Falha ao sincronizar recado com a nuvem.', 'error'); })
-          .catch(() => showNotification('Falha ao sincronizar recado com a nuvem.', 'error'));
-      }
-      form.reset();
-      showNotification('Recado enviado! 💛', 'success');
-      render();
-    } catch (err) {
-      showNotification('Erro ao enviar recado.', 'error');
-    }
-  });
-
-  // Re-render quando mensagens forem atualizadas pelo Firebase
-  window.addEventListener('babyMessagesUpdated', render);
-}
+// Mural de recados removido
 
 // ========== Notificações ==========
 function showNotification(message, type = 'info') {

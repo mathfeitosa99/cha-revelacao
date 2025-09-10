@@ -2065,3 +2065,204 @@ input, select, textarea, button {
     50% { transform: scale(0.9); -webkit-transform: scale(0.9); }
     100% { transform: scale(1); -webkit-transform: scale(1); }
 }
+
+/* ===== AJUSTES DE PALETA (BEGE/BRANCO/MARROM/DOURADO) ===== */
+.hero {
+    position: relative;
+    background: linear-gradient(135deg, rgba(244, 228, 188, 0.95) 0%, rgba(212, 175, 55, 0.10) 100%);
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    padding: var(--spacing-xl) 0;
+}
+
+.hero-cta {
+    display: inline-block;
+    margin-top: var(--spacing-sm);
+    padding: 12px 22px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #D4AF37 0%, #8B7355 100%);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: var(--shadow-elegant-md);
+    transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+.hero-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-elegant-lg); filter: brightness(1.02); }
+
+/* Votação */
+.vote-options {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin: var(--spacing-sm) 0 var(--spacing-md);
+}
+.vote-btn {
+    min-width: 140px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 14px;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow-elegant-md);
+}
+.vote-btn.boy { background: linear-gradient(135deg, #D4AF37 0%, #B08C3A 100%); }
+.vote-btn.girl { background: linear-gradient(135deg, #8B7355 0%, #A68B6A 100%); }
+.vote-btn:hover { filter: brightness(1.03); transform: translateY(-1px); }
+
+.vote-results { margin-top: var(--spacing-sm); }
+.result-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    height: 16px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: #f4ead4;
+    border: 1px solid rgba(139, 115, 85, 0.15);
+}
+.bar { position: relative; height: 100%; transition: width .6s ease; }
+.boy-bar { background: linear-gradient(90deg, #D4AF37, #B08C3A); }
+.girl-bar { background: linear-gradient(90deg, #8B7355, #A68B6A); }
+.result-bar span { position: absolute; top: -28px; color: var(--primary-dark); font-weight: 700; }
+
+.total-votes { text-align: center; color: var(--primary-dark); font-weight: 600; margin-top: 10px; }
+
+/* Botões gerais */
+.btn, .rsvp-submit-btn, .map-btn, .calendar-btn {
+    background: linear-gradient(135deg, #8B7355 0%, #A68B6A 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow-elegant-md);
+}
+.btn:hover, .rsvp-submit-btn:hover, .map-btn:hover, .calendar-btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
+
+/* Galeria: duas fotos apenas (já no HTML) */
+.photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.photo-item { position: relative; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-elegant-md); }
+.photo-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center; padding: 10px; background: linear-gradient(180deg, transparent, rgba(0,0,0,.35)); color: #fff; font-weight: 600; }
+
+/* ===== REFINOS ADICIONAIS + TEMA ESCURO ===== */
+/* Centralização e tipografia do hero conforme referência */
+.hero { display: flex; align-items: center; justify-content: center; min-height: 72vh; }
+.hero-content { text-align: center; margin: 0 auto; max-width: 760px; padding: var(--spacing-xl) var(--spacing-md); }
+.hero-icons { margin: 6px 0 var(--spacing-lg); }
+.title { font-size: clamp(2.8rem, 7vw, 4.5rem); letter-spacing: 0.5px; color: #8B7355; background: none; -webkit-text-fill-color: initial; }
+.subtitle { font-size: clamp(1.6rem, 4.5vw, 2.3rem); color: #8B7355; margin-bottom: 22px; background: none; -webkit-text-fill-color: initial; }
+.date-info { background: #fff; padding: 24px 28px; border-radius: 18px; margin: var(--spacing-lg) auto; box-shadow: var(--shadow-elegant-lg); text-align: left; max-width: 720px; }
+.date { font-size: 1.3rem; font-weight: 700; color: #5D4E37 !important; }
+.time { margin-top: 10px; color: #666666 !important; }
+.hero-cta { margin-top: 10px; padding: 12px 24px; font-weight: 700; }
+
+/* Botão de tema */
+.theme-toggle { position: absolute; top: 12px; right: 12px; border: none; background: #ffffffdd; color: #5D4E37; width: 38px; height: 38px; border-radius: 50%; box-shadow: var(--shadow-elegant-md); cursor: pointer; font-size: 18px; }
+
+/* Tema escuro: mesma paleta com contraste seguro */
+.dark-mode body { background: #1f1a14; color: #EFE7DC; }
+.dark-mode .hero { background: linear-gradient(135deg, rgba(48, 39, 30, 0.95) 0%, rgba(199, 164, 58, 0.12) 100%); }
+.dark-mode .content-box { background: #2c241c; border-color: rgba(233,216,166,0.12); }
+.dark-mode .title, .dark-mode .subtitle { color: #E9D8A6; -webkit-text-fill-color: initial; background: none; }
+.dark-mode .date-info { background: #2c241c; box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+.dark-mode .date { color: #E9D8A6 !important; }
+.dark-mode .time { color: #CFC3B2 !important; }
+.dark-mode .hero-cta, .dark-mode .btn, .dark-mode .rsvp-submit-btn, .dark-mode .map-btn, .dark-mode .calendar-btn { filter: brightness(0.95); }
+.dark-mode .theme-toggle { background: #33291f; color: #E9D8A6; }
+
+/* ===== Overrides solicitados ===== */
+/* 1) Centralizar data/hora no primeiro box */
+.date-info { text-align: center !important; }
+
+/* 2) Contagem Regressiva lado a lado no desktop */
+.countdown-timer { grid-template-columns: repeat(4, minmax(140px, 1fr)) !important; gap: 40px !important; max-width: 960px !important; }
+.time-unit { padding: var(--spacing-md) !important; }
+.number { font-size: 2.2rem !important; }
+.label { font-size: 0.85rem !important; }
+@media (max-width: 768px) { .countdown-timer { grid-template-columns: repeat(2, minmax(120px, 1fr)) !important; gap: 24px !important; max-width: 520px !important; } }
+@media (max-width: 420px) { .countdown-timer { grid-template-columns: repeat(2, minmax(100px, 1fr)) !important; gap: 16px !important; } .number { font-size: 1.8rem !important; } }
+
+/* 3) Inputs do RSVP não excederem o card */
+.rsvp-form { max-width: 720px; margin: 0 auto; }
+.rsvp-form .form-group input,
+.rsvp-form .form-group select,
+.rsvp-form .form-group textarea { width: 100%; max-width: 100%; box-sizing: border-box; }
+.content.content-box { overflow: hidden; }
+
+/* ===== Polimentos visuais adicionais ===== */
+html { scroll-behavior: smooth; }
+
+/* Hero refinado: espaçamentos e centralização */
+.hero { min-height: 78vh; }
+.hero-content .title { margin-bottom: 6px; }
+.hero-content .subtitle { margin-bottom: 18px; }
+
+/* Card de Data/Hora mais elegante */
+.date-info {
+    border-radius: 24px !important;
+    box-shadow: 0 16px 36px rgba(139, 115, 85, 0.18) !important;
+    padding: 26px 32px !important;
+}
+
+/* CTA mais destacado */
+.hero-cta { box-shadow: 0 10px 22px rgba(139, 115, 85, 0.18) !important; }
+.hero-cta:focus { outline: 3px solid rgba(212,175,55,0.45); outline-offset: 3px; }
+
+/* Contador: lado a lado em desktop */
+.countdown .content-box { max-width: 1100px; margin: 0 auto; }
+.countdown-timer { grid-template-columns: repeat(4, minmax(140px, 1fr)) !important; gap: 40px !important; max-width: 960px !important; }
+.time-unit { padding: var(--spacing-md) !important; }
+.number { font-size: 2.2rem !important; }
+.label { font-size: 0.85rem !important; }
+@media (max-width: 900px) { .countdown-timer { grid-template-columns: repeat(2, minmax(140px, 1fr)) !important; gap: 28px !important; } }
+@media (max-width: 480px) { .countdown-timer { grid-template-columns: repeat(2, minmax(110px, 1fr)) !important; gap: 16px !important; } .number { font-size: 1.8rem !important; } }
+
+/* RSVP: garantir que inputs não excedam o card e visual refinado */
+.rsvp .content-box { max-width: 840px; margin: 0 auto; }
+.rsvp-form .form-group { margin-bottom: 18px; }
+.rsvp-form .form-group label { display: block; font-weight: 600; color: var(--primary-dark); margin-bottom: 8px; }
+.rsvp-form input, .rsvp-form select, .rsvp-form textarea {
+    width: 100%; max-width: 100%; box-sizing: border-box;
+    background: #fff; color: #2C2C2C;
+    border: 2px solid #E8E8E8; border-radius: 16px; padding: 14px 16px;
+    box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
+}
+.rsvp-form input:focus, .rsvp-form select:focus, .rsvp-form textarea:focus { border-color: #D4AF37; outline: none; box-shadow: 0 0 0 4px rgba(212,175,55,0.18); }
+.rsvp .rsvp-submit-btn { margin-top: 8px; }
+
+/* Garantir partículas no fundo, sem cobrir form */
+.particles-container { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.container { position: relative; z-index: 1; }
+
+/* ===== Fine-tuning: hero spacing + subtle pattern + countdown circles ===== */
+/* Hero spacing (milimetric) */
+.hero { min-height: 78vh; }
+.hero-icons { margin: 8px 0 18px !important; }
+.hero-content .title { margin-bottom: 8px !important; }
+.hero-content .subtitle { margin-bottom: 26px !important; }
+.date-info { margin-top: 34px !important; }
+.hero-cta { margin-top: 18px !important; }
+
+/* Hero subtle background pattern (very soft) */
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(1200px 700px at 80% 20%, rgba(212, 175, 55, 0.06) 0%, transparent 60%),
+      radial-gradient(900px 600px at 20% 80%, rgba(139, 115, 85, 0.05) 0%, transparent 60%),
+      repeating-linear-gradient(45deg, rgba(139,115,85,0.035) 0 2px, rgba(0,0,0,0) 2px 10px);
+    mix-blend-mode: soft-light;
+}
+
+/* Countdown: circles a pouco menores e sombra mais sutil */
+.countdown-timer { grid-template-columns: repeat(4, minmax(130px, 1fr)) !important; gap: 36px !important; max-width: 880px !important; }
+.time-unit { box-shadow: 0 6px 18px rgba(139,115,85,0.16) !important; }
+.time-unit:hover { transform: scale(1.02) !important; }
+.number { font-size: 2.1rem !important; }
+.label { font-size: 0.82rem !important; letter-spacing: 0.8px !important; }
+@media (max-width: 900px) { .countdown-timer { grid-template-columns: repeat(2, minmax(130px, 1fr)) !important; gap: 24px !important; max-width: 560px !important; } }
+@media (max-width: 480px) { .countdown-timer { grid-template-columns: repeat(2, minmax(110px, 1fr)) !important; gap: 16px !important; } .number { font-size: 1.8rem !important; } }

@@ -1,162 +1,69 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Confirmações - Chá Revelação</title>
-    <link rel="stylesheet" href="styles-new.css">
-    <style>
-        body { background: linear-gradient(135deg, #f5f5dc 0%, #e8e8e8 100%); min-height: 100vh; }
-        .admin-panel {
-            max-width: 700px;
-            margin: 48px auto 32px auto;
-            background: #fff;
-            border-radius: 24px;
-            box-shadow: 0 8px 32px #8b735533, 0 1.5px 8px #0001;
-            padding: 40px 32px 32px 32px;
-            position: relative;
-        }
-        .admin-panel h2 {
-            text-align: center;
-            margin-bottom: 32px;
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            color: #8B7355;
-            letter-spacing: 1px;
-        }
-        .placar {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            margin-bottom: 32px;
-        }
-        .stat {
-            background: linear-gradient(135deg, #f5f5dc 60%, #e8e8e8 100%);
-            border-radius: 16px;
-            padding: 18px 32px;
-            text-align: center;
-            box-shadow: 0 2px 12px #8b735522;
-            min-width: 120px;
-        }
-        .stat strong {
-            display: block;
-            font-size: 2.1em;
-            color: #8B7355;
-            font-family: 'Playfair Display', serif;
-            margin-bottom: 4px;
-        }
-        .stat span {
-            font-size: 1em;
-            color: #666;
-        }
-        .admin-list {
-            margin-top: 0;
-            margin-bottom: 8px;
-        }
-        .admin-item {
-            background: linear-gradient(90deg, #f8f9fa 80%, #f5f5dc 100%);
-            border-radius: 12px;
-            padding: 18px 20px 14px 20px;
-            margin-bottom: 14px;
-            border-left: 5px solid #8B7355;
-            box-shadow: 0 1.5px 8px #8b735511;
-            transition: transform 0.12s;
-        }
-        .admin-item:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 4px 16px #8b735522;
-        }
-        .admin-item .name {
-            font-weight: bold;
-            font-size: 1.1em;
-            color: #8B7355;
-            margin-bottom: 2px;
-        }
-        .admin-item .info {
-            color: #555;
-            font-size: 0.98em;
-        }
-        @media (max-width: 600px) {
-            .admin-panel { padding: 18px 4vw; }
-            .placar { flex-direction: column; gap: 18px; }
-            .stat { min-width: 0; padding: 12px 0; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Confirmações - Chá Revelação</title>
+  <link rel="stylesheet" href="styles-new.css">
+  <style>
+    body { background: linear-gradient(135deg, #f5f5dc 0%, #e8e8e8 100%); min-height: 100vh; }
+    .admin-panel { max-width: 760px; margin: 48px auto 32px auto; background:#fff; border-radius:24px; box-shadow:0 8px 32px #8b735533, 0 1.5px 8px #0001; padding:40px 32px 32px; }
+    .admin-panel h2 { text-align:center; margin-bottom:24px; font-size:2.1rem; color:#8B7355; letter-spacing:.4px; }
+    .placar { display:flex; justify-content:center; gap:28px; margin-bottom:24px; flex-wrap:wrap; }
+    .stat { background: linear-gradient(135deg, #f5f5dc 60%, #e8e8e8 100%); border-radius:16px; padding:16px 28px; text-align:center; box-shadow:0 2px 12px #8b735522; min-width:120px; }
+    .stat strong { display:block; font-size:2em; color:#8B7355; margin-bottom:4px; }
+    .stat span { font-size:1em; color:#666; }
+    .admin-list { margin-top:0; margin-bottom:8px; }
+    .admin-item { background: linear-gradient(90deg, #f8f9fa 80%, #f5f5dc 100%); border-radius:12px; padding:16px 18px 12px 18px; margin-bottom:12px; border-left:5px solid #8B7355; box-shadow:0 1.5px 8px #8b735511; }
+    .admin-item .name { font-weight:700; color:#8B7355; margin-bottom:2px; }
+    .admin-item .info { color:#555; font-size:.98em; }
+    @media (max-width: 600px){ .admin-panel{ padding:18px 4vw;} .placar{ gap:18px;} .stat{ min-width:0; padding:12px 0; } }
+  </style>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:;">
 </head>
 <body>
-    <div class="admin-panel">
-        <h2>Confirmações de Presença</h2>
-        <div class="placar">
-            <div class="stat"><strong id="totalRSVP">0</strong><span>Total RSVP</span></div>
-            <div class="stat"><strong id="totalConfirmados">0</strong><span>Confirmados</span></div>
-            <div class="stat"><strong id="totalPessoas">0</strong><span>Pessoas</span></div>
-        </div>
-        <div class="admin-list" id="adminList">
-            <p>Carregando confirmações...</p>
-        </div>
+  <div class="admin-panel">
+    <h2>Confirmações de Presença</h2>
+    <div class="placar">
+      <div class="stat"><strong id="totalRSVP">0</strong><span>Total RSVP</span></div>
+      <div class="stat"><strong id="totalConfirmados">0</strong><span>Confirmados</span></div>
+      <div class="stat"><strong id="totalPessoas">0</strong><span>Pessoas</span></div>
     </div>
-    <script src="firebase-config.js"></script>
-    <script>
-    // Busca confirmações do Firebase se disponível, senão localStorage
-    async function loadConfirmations() {
-        if (window.FirebaseSync && typeof window.FirebaseSync.loadMessages === 'function') {
-            // Tenta buscar do Firebase
-            try {
-                // Usar a mesma lógica do RSVP, mas buscar do Firebase
-                const db = await window.FirebaseSync.init();
-                // Buscar confirmações (rsvpConfirmations) do Firebase
-                // Como não há função pronta, buscar do localStorage como fallback
-                let confirmations = [];
-                // Tenta buscar do localStorage (caso não tenha integração completa no Firebase)
-                try {
-                    confirmations = JSON.parse(localStorage.getItem('rsvpConfirmations')) || [];
-                } catch (e) {}
-                return confirmations;
-            } catch (e) {
-                // Fallback localStorage
-                let confirmations = [];
-                try {
-                    confirmations = JSON.parse(localStorage.getItem('rsvpConfirmations')) || [];
-                } catch (e) {}
-                return confirmations;
-            }
-        } else {
-            // Fallback localStorage
-            let confirmations = [];
-            try {
-                confirmations = JSON.parse(localStorage.getItem('rsvpConfirmations')) || [];
-            } catch (e) {}
-            return confirmations;
-        }
-    }
+    <div class="admin-list" id="adminList">
+      <p>Carregando confirmações...</p>
+    </div>
+  </div>
 
-    async function renderPanel() {
-        const list = document.getElementById('adminList');
-        const totalRSVP = document.getElementById('totalRSVP');
-        const totalConfirmados = document.getElementById('totalConfirmados');
-        const totalPessoas = document.getElementById('totalPessoas');
-        const confirmations = await loadConfirmations();
-        if (!confirmations.length) {
-            list.innerHTML = '<p>Nenhuma confirmação encontrada.</p>';
-            totalRSVP.textContent = '0';
-            totalConfirmados.textContent = '0';
-            totalPessoas.textContent = '0';
-            return;
-        }
-        let confirmados = 0;
-        let pessoas = 0;
-        list.innerHTML = confirmations.map(c => {
-            if (c.attendance === 'sim') {
-                confirmados++;
-                pessoas += Number(c.count) || 1;
-            }
-            return `<div class='admin-item'><div class='name'>${c.name}</div><div class='info'>${c.phone ? '📱 ' + c.phone + ' | ' : ''}👥 ${c.count || 1} pessoa(s) | ${c.attendance === 'sim' ? '✅ Confirmado' : c.attendance === 'nao' ? '❌ Não virá' : '🤔 Talvez'}</div></div>`;
-        }).join('');
-        totalRSVP.textContent = confirmations.length;
-        totalConfirmados.textContent = confirmados;
-        totalPessoas.textContent = pessoas;
+  <script>
+  function loadConfirmations(){
+    try { return JSON.parse(localStorage.getItem('rsvpConfirmations')) || []; } catch(e){ return []; }
+  }
+  function renderPanel(){
+    const list = document.getElementById('adminList');
+    const totalRSVP = document.getElementById('totalRSVP');
+    const totalConfirmados = document.getElementById('totalConfirmados');
+    const totalPessoas = document.getElementById('totalPessoas');
+    const confirmations = loadConfirmations();
+    if(!confirmations.length){
+      list.innerHTML = '<p>Nenhuma confirmação encontrada.</p>';
+      totalRSVP.textContent = '0';
+      totalConfirmados.textContent = '0';
+      totalPessoas.textContent = '0';
+      return;
     }
-    renderPanel();
-    </script>
+    let confirmados = 0; let pessoas = 0;
+    list.innerHTML = confirmations.map(c=>{
+      if(c.attendance === 'sim'){ confirmados++; pessoas += Number(c.count)||1; }
+      const status = c.attendance === 'sim' ? '✅ Confirmado' : (c.attendance === 'nao' ? '❌ Não virá' : '🤔 Talvez');
+      const phone = c.phone ? `📞 ${c.phone} | ` : '';
+      return `<div class="admin-item"><div class="name">${c.name}</div><div class="info">${phone}👥 ${c.count||1} pessoa(s) | ${status}</div></div>`;
+    }).join('');
+    totalRSVP.textContent = confirmations.length;
+    totalConfirmados.textContent = confirmados;
+    totalPessoas.textContent = pessoas;
+  }
+  renderPanel();
+  </script>
 </body>
 </html>
+

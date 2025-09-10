@@ -1,284 +1,197 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chá Revelação - Aline & Matheus</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👶</text></svg>">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Dancing+Script:700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles-new.css">
-    <!-- Firebase é opcional; se falhar, o app segue offline -->
-    <script src="firebase-config.js" defer></script>
-    <script src="script.js" defer></script>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https:; script-src 'self' https://www.gstatic.com 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://www.gstatic.com https://*.firebaseio.com https://*.googleapis.com https://*.firebasedatabase.app wss://*.firebaseio.com wss://*.firebasedatabase.app;">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chá Revelação - Aline & Matheus</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👶</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Dancing+Script:700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles-new.css">
+  <script src="script.js" defer></script>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https:; script-src 'self'; img-src 'self' data: https:; connect-src 'self';">
 </head>
 <body>
-    <!-- Loading Screen Elegante -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <div class="loading-subtitle">Aline & Matheus</div>
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <div class="loading-subtitle">Aline & Matheus</div>
+    </div>
+  </div>
+
+  <div class="container">
+    <header class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-icons">
+          <span class="hero-icon">🎉</span>
+          <span class="hero-icon">👶</span>
+          <span class="hero-icon">🎀</span>
         </div>
-    </div>
-
-    <div class="container">
-        <header class="hero">
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <div class="hero-icons">
-                    <span class="hero-icon">🎉</span>
-                    <span class="hero-icon">👶</span>
-                    <span class="hero-icon">🎀</span>
-                </div>
-                <h1 class="title">Chá Revelação</h1>
-                <p class="subtitle">Aline & Matheus</p>
-                <div class="date-info">
-                    <p class="date">05 de Outubro, 2025</p>
-                    <p class="time">15:00h</p>
-                </div>
-                <a href="#rsvp" class="hero-cta">Confirmar Presença</a>
-            </div>
-            <div class="decorative-divider">
-                <svg viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0,10 Q25,0 50,10 T100,10" stroke="currentColor" fill="none" stroke-width="2"/>
-                </svg>
-            </div>
-        </header>
-
-        <section class="countdown fade-in-section">
-            <div class="content content-box">
-                <h2>Contagem Regressiva</h2>
-                <div class="countdown-timer">
-                    <div class="time-unit">
-                        <span class="number" id="days">00</span>
-                        <span class="label">Dias</span>
-                    </div>
-                    <div class="time-unit">
-                        <span class="number" id="hours">00</span>
-                        <span class="label">Horas</span>
-                    </div>
-                    <div class="time-unit">
-                        <span class="number" id="minutes">00</span>
-                        <span class="label">Minutos</span>
-                    </div>
-                    <div class="time-unit">
-                        <span class="number" id="seconds">00</span>
-                        <span class="label">Segundos</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="invitation fade-in-section">
-            <div class="content content-box">
-                <h2>Você está convidado(a)!</h2>
-                <p>Venha descobrir conosco se nosso bebê será um menino ou uma menina. Sua presença tornará este momento ainda mais especial!</p>
-            </div>
-        </section>
-
-        <section class="details">
-            <div class="content content-box">
-                <h3>Detalhes do Evento</h3>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <h4>📍 Local</h4>
-                        <p>Tv. Green Village, 40 - Capela Velha<br>Araucária - PR - Salão de Festas I</p>
-                        <button class="map-btn" onclick="window.openMap()">Ver no Mapa</button>
-
-                        <!-- Mapa Interativo -->
-                        <div class="interactive-map">
-                            <iframe 
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3602.8574!2d-49.3961!3d-25.5541!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94dd02e8bdd998fd%3A0xbb8112ce0fd98ec7!2sCondom%C3%ADnio%20Green%20Village!5e0!3m2!1spt-BR!2sbr!4v1234567890!5m2!1spt-BR!2sbr" 
-                                width="100%" 
-                                height="250" 
-                                style="border:0; border-radius: 10px; margin-top: 15px;" 
-                                allowfullscreen="" 
-                                loading="lazy" 
-                                referrerpolicy="no-referrer-when-downgrade">
-                            </iframe>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <h4>⏰ Horário</h4>
-                        <p>15:00h às 21:00h</p>
-                        <button class="calendar-btn" onclick="window.addToCalendar()">🗓️ Adicionar ao Calendário</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="voting">
-            <div class="content content-box">
-                <h3>Qual é o seu palpite?</h3>
-                <p>Vote e veja o que os outros convidados acham!</p>
-                <div class="vote-options">
-                    <button class="vote-btn boy" data-vote="menino">
-                        👦 Menino
-                    </button>
-                    <button class="vote-btn girl" data-vote="menina">
-                        👧 Menina
-                    </button>
-                </div>
-                <div class="vote-results">
-                    <div class="result-bar">
-                        <div class="bar boy-bar">
-                            <span id="boyPercentage">50%</span>
-                        </div>
-                        <div class="bar girl-bar">
-                            <span id="girlPercentage">50%</span>
-                        </div>
-                    </div>
-                    <p class="total-votes">Total de votos: <span id="totalVotes">0</span></p>
-                </div>
-            </div>
-        </section>
-
-        <section class="rsvp" id="rsvp">
-            <div class="content content-box">
-                <h3>✅ Confirme sua Presença</h3>
-                <p>Ajude-nos a organizar o evento! Confirme se você virá:</p>
-                
-                <form class="rsvp-form" id="rsvpForm">
-                    <div class="form-group">
-                        <label for="guestName">Seu nome completo:</label>
-                        <input type="text" id="guestName" name="guestName" placeholder="Digite seu nome completo" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="guestPhone">Seu telefone/WhatsApp:</label>
-                        <input type="tel" id="guestPhone" name="guestPhone" placeholder="(11) 99999-9999" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="guestAttendance">Você virá ao evento?</label>
-                        <select id="guestAttendance" name="guestAttendance" required>
-                            <option value="">Selecione uma opção</option>
-                            <option value="sim">✅ Sim, estarei lá!</option>
-                            <option value="nao">❌ Não poderei ir</option>
-                            <option value="talvez">🤔 Talvez, confirmo depois</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group" id="guestCountGroup" style="display: none;">
-                        <label for="guestCount">Quantas pessoas virão com você?</label>
-                        <select id="guestCount" name="guestCount">
-                            <option value="1">Apenas eu</option>
-                            <option value="2">2 pessoas</option>
-                            <option value="3">3 pessoas</option>
-                            <option value="4">4 pessoas</option>
-                            <option value="5">5+ pessoas</option>
-                        </select>
-                    </div>
-                    
-                    <button type="submit" class="rsvp-submit-btn">
-                        <span class="btn-text">✅ Confirmar Presença</span>
-                        <span class="btn-loading" style="display: none;">⏳ Enviando...</span>
-                    </button>
-                </form>
-            </div>
-        </section>
-
-        <section class="gallery">
-            <div class="content content-box">
-                <h3>Galeria de Momentos</h3>
-                <p>Alguns momentos especiais da nossa jornada</p>
-                
-                <div class="photo-grid">
-                    <div class="photo-item">
-                        <img src="primeiro-ultrassom.jpeg" alt="Primeiro ultrassom" loading="lazy">
-                        <div class="photo-overlay">
-                            <span class="photo-caption">Primeiro ultrassom</span>
-                        </div>
-                    </div>
-                    <div class="photo-item">
-                        <img src="teste-gravidez.jpeg" alt="Teste de gravidez" loading="lazy">
-                        <div class="photo-overlay">
-                            <span class="photo-caption">Teste de gravidez</span>
-                        </div>
-                    </div>
-                    <div class="photo-item placeholder">
-                        <img src="" alt="Mais momentos em breve" loading="lazy">
-                        <div class="photo-overlay">
-                            <span class="photo-caption">Em breve</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="gifts">
-            <div class="content content-box">
-                <h3>🎁 Lista de Presentes</h3>
-                <p>Se quiserem nos ajudar nesse início, ficaremos muito felizes em receber fraldas:</p>
-                
-                <div class="gift-details">
-                    <div class="gift-section">
-                        <h4>🧷 Fraldas:</h4>
-                        <ul class="diaper-list">
-                            <li>Tamanho P</li>
-                            <li>Tamanho M</li>
-                            <li>Tamanho G</li>
-                        </ul>
-                        
-                        <p>Se preferirem, mimos ou roupinhas também serão recebidos com muito carinho.</p>
-                    </div>
-                    
-                    <div class="gift-section">
-                        <h4>ℹ️ Observação:</h4>
-                        <p>Lembre-se: o mais importante é sua presença no nosso dia especial! Os presentes são opcionais e qualquer gesto de carinho será muito apreciado. 💛</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="messages">
-            <div class="content content-box">
-                <h3>💬 Mural de Recados</h3>
-                <p>Deixe uma mensagem carinhosa para nós!</p>
-                
-                <form class="message-form">
-                    <div class="form-group">
-                        <label for="messageName">Seu nome:</label>
-                        <input type="text" id="messageName" name="messageName" placeholder="Digite seu nome" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="messageText">Sua mensagem:</label>
-                        <textarea id="messageText" name="messageText" placeholder="Deixe uma mensagem carinhosa..." required></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn">✉️ Enviar Recado</button>
-                </form>
-                
-                <div class="messages-list" id="messagesList">
-                    <!-- Mensagens serão carregadas aqui -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Modal da Galeria -->
-        <div class="photo-modal" id="photoModal">
-            <div class="modal-content">
-                <span class="close-modal">&times;</span>
-                <img id="modalImage" src="" alt="">
-                <div class="modal-caption" id="modalCaption"></div>
-            </div>
+        <h1 class="title">Chá Revelação</h1>
+        <p class="subtitle">Aline & Matheus</p>
+        <div class="date-info">
+          <p class="date">05 de Outubro, 2025</p>
+          <p class="time">15:00h</p>
         </div>
+        <a href="#rsvp" class="hero-cta">Confirmar Presença</a>
+      </div>
+      <div class="decorative-divider">
+        <svg viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg"><path d="M0,10 Q25,0 50,10 T100,10" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+      </div>
+    </header>
+
+    <section class="countdown fade-in-section">
+      <div class="content content-box">
+        <h2>Contagem Regressiva</h2>
+        <div class="countdown-timer">
+          <div class="time-unit">
+            <span class="number" id="days">00</span>
+            <span class="label">Dias</span>
+          </div>
+          <div class="time-unit">
+            <span class="number" id="hours">00</span>
+            <span class="label">Horas</span>
+          </div>
+          <div class="time-unit">
+            <span class="number" id="minutes">00</span>
+            <span class="label">Minutos</span>
+          </div>
+          <div class="time-unit">
+            <span class="number" id="seconds">00</span>
+            <span class="label">Segundos</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="invitation fade-in-section">
+      <div class="content content-box">
+        <h2>Você está convidado(a)!</h2>
+        <p>Venha descobrir conosco se nosso bebê será um menino ou uma menina. Sua presença tornará este momento ainda mais especial!</p>
+      </div>
+    </section>
+
+    <section class="details">
+      <div class="content content-box">
+        <h3>Detalhes do Evento</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <h4>📍 Local</h4>
+            <p>Tv. Green Village, 40 - Capela Velha<br>Araucária - PR - Salão de Festas I</p>
+            <button class="map-btn" onclick="window.openMap()">Ver no Mapa</button>
+            <div class="interactive-map">
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3602.8574!2d-49.3961!3d-25.5541!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94dd02e8bdd998fd%3A0xbb8112ce0fd98ec7!2sCondom%C3%ADnio%20Green%20Village!5e0!3m2!1spt-BR!2sbr!4v1234567890!5m2!1spt-BR!2sbr" width="100%" height="250" style="border:0; border-radius: 10px; margin-top: 15px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </div>
+          <div class="info-item">
+            <h4>⏰ Horário</h4>
+            <p>15:00h às 21:00h</p>
+            <button class="calendar-btn" onclick="window.addToCalendar()">🗓️ Adicionar ao Calendário</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rsvp" id="rsvp">
+      <div class="content content-box">
+        <h3>✅ Confirme sua Presença</h3>
+        <p>Ajude-nos a organizar o evento! Confirme se você virá:</p>
+        <form class="rsvp-form" id="rsvpForm">
+          <div class="form-group">
+            <label for="guestName">Seu nome completo:</label>
+            <input type="text" id="guestName" name="guestName" placeholder="Digite seu nome completo" required>
+          </div>
+          <div class="form-group">
+            <label for="guestPhone">Seu telefone/WhatsApp:</label>
+            <input type="tel" id="guestPhone" name="guestPhone" placeholder="(11) 99999-9999" required>
+          </div>
+          <div class="form-group">
+            <label for="guestAttendance">Você virá ao evento?</label>
+            <select id="guestAttendance" name="guestAttendance" required>
+              <option value="">Selecione uma opção</option>
+              <option value="sim">✅ Sim, estarei lá!</option>
+              <option value="nao">❌ Não poderei ir</option>
+              <option value="talvez">🤔 Talvez, confirmo depois</option>
+            </select>
+          </div>
+          <div class="form-group" id="guestCountGroup" style="display: none;">
+            <label for="guestCount">Quantas pessoas virão com você?</label>
+            <select id="guestCount" name="guestCount">
+              <option value="1">Apenas eu</option>
+              <option value="2">2 pessoas</option>
+              <option value="3">3 pessoas</option>
+              <option value="4">4 pessoas</option>
+              <option value="5">5+ pessoas</option>
+            </select>
+          </div>
+          <button type="submit" class="rsvp-submit-btn">
+            <span class="btn-text">✅ Confirmar Presença</span>
+            <span class="btn-loading" style="display: none;">⏳ Enviando...</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Gifts before Gallery -->
+    <section class="gifts">
+      <div class="content content-box">
+        <h3>🎁 Lista de Presentes</h3>
+        <p>Se quiserem nos ajudar nesse início, ficaremos muito felizes em receber fraldas:</p>
+        <div class="gift-details">
+          <div class="gift-section">
+            <h4>🧷 Fraldas:</h4>
+            <ul class="diaper-list">
+              <li>Tamanho P</li>
+              <li>Tamanho M</li>
+              <li>Tamanho G</li>
+            </ul>
+            <p>Se preferirem, mimos ou roupinhas também serão recebidos com muito carinho.</p>
+          </div>
+          <div class="gift-section">
+            <h4>ℹ️ Observação:</h4>
+            <p>Lembre-se: o mais importante é sua presença no nosso dia especial! Os presentes são opcionais e qualquer gesto de carinho será muito apreciado. 💛</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery last -->
+    <section class="gallery">
+      <div class="content content-box">
+        <h3>Galeria de Momentos</h3>
+        <p>Alguns momentos especiais da nossa jornada</p>
+        <div class="photo-grid">
+          <div class="photo-item">
+            <img src="primeiro-ultrassom.jpeg" alt="Primeiro ultrassom" loading="lazy">
+            <div class="photo-overlay"><span class="photo-caption">Primeiro ultrassom</span></div>
+          </div>
+          <div class="photo-item">
+            <img src="teste-gravidez.jpeg" alt="Teste de gravidez" loading="lazy">
+            <div class="photo-overlay"><span class="photo-caption">Teste de gravidez</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal da Galeria -->
+    <div class="photo-modal" id="photoModal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <img id="modalImage" src="" alt="">
+        <div class="modal-caption" id="modalCaption"></div>
+      </div>
     </div>
+  </div>
 
-    <!-- Partículas Decorativas -->
-    <div class="particles-container" id="particlesContainer"></div>
+  <!-- Partículas Decorativas -->
+  <div class="particles-container" id="particlesContainer"></div>
 
-    <!-- Botão Painel Admin Discreto -->
-    <a href="painel-admin.html" target="_blank" style="position: fixed; bottom: 10px; left: 10px; z-index: 1000; font-size: 12px; color: rgba(0,0,0,0.2); text-decoration: none;">Admin</a>
-
-    <!-- Indicador de status Firebase -->
-    <div id="firebaseStatus" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:2000;padding:6px 18px;border-radius:20px;font-size:1rem;font-weight:500;box-shadow:0 2px 8px #0002;background:#fff;color:#222;display:none;align-items:center;gap:8px;">
-        <span id="firebaseStatusIcon" style="font-size:1.2em;">☁️</span>
-        <span id="firebaseStatusText">Sincronizando...</span>
-    </div>
+  <!-- Link Admin Discreto -->
+  <a href="painel-admin.html" target="_blank" style="position: fixed; bottom: 10px; left: 10px; z-index: 1000; font-size: 12px; color: rgba(0,0,0,0.2); text-decoration: none;">Admin</a>
 
 </body>
 </html>
+
