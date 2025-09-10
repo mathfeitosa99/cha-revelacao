@@ -3,36 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chá Revelação - 𝓐𝓵𝓲𝓷𝓮 & 𝓜𝓪𝓽𝓱𝓮𝓾𝓼</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎉</text></svg>">
+    <title>Chá Revelação - Aline & Matheus</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👶</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Dancing+Script:700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles-new.css">
+    <!-- Firebase é opcional; se falhar, o app segue offline -->
+    <script src="firebase-config.js" defer></script>
     <script src="script.js" defer></script>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https:; script-src 'self' https://www.gstatic.com 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://www.gstatic.com https://*.firebaseio.com https://*.googleapis.com https://*.firebasedatabase.app wss://*.firebaseio.com wss://*.firebasedatabase.app;">
 </head>
 <body>
     <!-- Loading Screen Elegante -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-content">
             <div class="loading-spinner"></div>
-            <div class="loading-subtitle">𝓐𝓵𝓲𝓷𝓮 & 𝓜𝓪𝓽𝓱𝓮𝓾𝓼</div>
+            <div class="loading-subtitle">Aline & Matheus</div>
         </div>
     </div>
-    
-
 
     <div class="container">
         <header class="hero">
             <div class="hero-overlay"></div>
             <div class="hero-content">
                 <div class="hero-icons">
+                    <span class="hero-icon">🎉</span>
                     <span class="hero-icon">👶</span>
                     <span class="hero-icon">🎀</span>
-                    <span class="hero-icon">🤍</span>
                 </div>
                 <h1 class="title">Chá Revelação</h1>
-                <p class="subtitle">𝓐𝓵𝓲𝓷𝓮 & 𝓜𝓪𝓽𝓱𝓮𝓾𝓼</p>
+                <p class="subtitle">Aline & Matheus</p>
                 <div class="date-info">
                     <p class="date">05 de Outubro, 2025</p>
                     <p class="time">15:00h</p>
@@ -70,7 +71,7 @@
             </div>
         </section>
 
-                <section class="invitation fade-in-section">
+        <section class="invitation fade-in-section">
             <div class="content content-box">
                 <h2>Você está convidado(a)!</h2>
                 <p>Venha descobrir conosco se nosso bebê será um menino ou uma menina. Sua presença tornará este momento ainda mais especial!</p>
@@ -85,7 +86,7 @@
                         <h4>📍 Local</h4>
                         <p>Tv. Green Village, 40 - Capela Velha<br>Araucária - PR - Salão de Festas I</p>
                         <button class="map-btn" onclick="window.openMap()">Ver no Mapa</button>
-                        
+
                         <!-- Mapa Interativo -->
                         <div class="interactive-map">
                             <iframe 
@@ -100,14 +101,13 @@
                         </div>
                     </div>
                     <div class="info-item">
-                        <h4>🕐 Horário</h4>
+                        <h4>⏰ Horário</h4>
                         <p>15:00h às 21:00h</p>
-                        <button class="calendar-btn" onclick="window.addToCalendar()">📅 Adicionar ao Calendário</button>
+                        <button class="calendar-btn" onclick="window.addToCalendar()">🗓️ Adicionar ao Calendário</button>
                     </div>
                 </div>
             </div>
         </section>
-
 
         <section class="voting">
             <div class="content content-box">
@@ -115,7 +115,7 @@
                 <p>Vote e veja o que os outros convidados acham!</p>
                 <div class="vote-options">
                     <button class="vote-btn boy" data-vote="menino">
-                        👶 Menino
+                        👦 Menino
                     </button>
                     <button class="vote-btn girl" data-vote="menina">
                         👧 Menina
@@ -137,7 +137,7 @@
 
         <section class="rsvp" id="rsvp">
             <div class="content content-box">
-                <h3>🎉 Confirme sua Presença</h3>
+                <h3>✅ Confirme sua Presença</h3>
                 <p>Ajude-nos a organizar o evento! Confirme se você virá:</p>
                 
                 <form class="rsvp-form" id="rsvpForm">
@@ -173,16 +173,12 @@
                     </div>
                     
                     <button type="submit" class="rsvp-submit-btn">
-                        <span class="btn-text">🎉 Confirmar Presença</span>
+                        <span class="btn-text">✅ Confirmar Presença</span>
                         <span class="btn-loading" style="display: none;">⏳ Enviando...</span>
                     </button>
                 </form>
-                
-                
             </div>
         </section>
-
-
 
         <section class="gallery">
             <div class="content content-box">
@@ -191,21 +187,21 @@
                 
                 <div class="photo-grid">
                     <div class="photo-item">
-                        <img src="" alt="Momento especial 1" loading="lazy">
+                        <img src="primeiro-ultrassom.jpeg" alt="Primeiro ultrassom" loading="lazy">
                         <div class="photo-overlay">
-                            <span class="photo-caption">Em breve 📷</span>
+                            <span class="photo-caption">Primeiro ultrassom</span>
                         </div>
                     </div>
                     <div class="photo-item">
-                        <img src="" alt="Momento especial 2" loading="lazy">
+                        <img src="teste-gravidez.jpeg" alt="Teste de gravidez" loading="lazy">
                         <div class="photo-overlay">
-                            <span class="photo-caption">Em breve 📷</span>
+                            <span class="photo-caption">Teste de gravidez</span>
                         </div>
                     </div>
-                    <div class="photo-item">
-                        <img src="" alt="Momento especial 3" loading="lazy">
+                    <div class="photo-item placeholder">
+                        <img src="" alt="Mais momentos em breve" loading="lazy">
                         <div class="photo-overlay">
-                            <span class="photo-caption">Em breve 📷</span>
+                            <span class="photo-caption">Em breve</span>
                         </div>
                     </div>
                 </div>
@@ -219,7 +215,7 @@
                 
                 <div class="gift-details">
                     <div class="gift-section">
-                        <h4>👶 Fraldas:</h4>
+                        <h4>🧷 Fraldas:</h4>
                         <ul class="diaper-list">
                             <li>Tamanho P</li>
                             <li>Tamanho M</li>
@@ -230,8 +226,8 @@
                     </div>
                     
                     <div class="gift-section">
-                        <h4>💝 Observação:</h4>
-                        <p>Lembre-se: o mais importante é sua presença no nosso dia especial! Os presentes são opcionais e qualquer gesto de carinho será muito apreciado. 💕</p>
+                        <h4>ℹ️ Observação:</h4>
+                        <p>Lembre-se: o mais importante é sua presença no nosso dia especial! Os presentes são opcionais e qualquer gesto de carinho será muito apreciado. 💛</p>
                     </div>
                 </div>
             </div>
@@ -239,7 +235,7 @@
 
         <section class="messages">
             <div class="content content-box">
-                <h3>💌 Mural de Recados</h3>
+                <h3>💬 Mural de Recados</h3>
                 <p>Deixe uma mensagem carinhosa para nós!</p>
                 
                 <form class="message-form">
@@ -253,9 +249,7 @@
                         <textarea id="messageText" name="messageText" placeholder="Deixe uma mensagem carinhosa..." required></textarea>
                     </div>
                     
-                    <button type="submit" class="btn">
-                        💕 Enviar Recado
-                    </button>
+                    <button type="submit" class="btn">✉️ Enviar Recado</button>
                 </form>
                 
                 <div class="messages-list" id="messagesList">
@@ -263,7 +257,6 @@
                 </div>
             </div>
         </section>
-
 
         <!-- Modal da Galeria -->
         <div class="photo-modal" id="photoModal">
@@ -281,12 +274,11 @@
     <!-- Botão Painel Admin Discreto -->
     <a href="painel-admin.html" target="_blank" style="position: fixed; bottom: 10px; left: 10px; z-index: 1000; font-size: 12px; color: rgba(0,0,0,0.2); text-decoration: none;">Admin</a>
 
-
+    <!-- Indicador de status Firebase -->
+    <div id="firebaseStatus" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:2000;padding:6px 18px;border-radius:20px;font-size:1rem;font-weight:500;box-shadow:0 2px 8px #0002;background:#fff;color:#222;display:none;align-items:center;gap:8px;">
+        <span id="firebaseStatusIcon" style="font-size:1.2em;">☁️</span>
+        <span id="firebaseStatusText">Sincronizando...</span>
+    </div>
 
 </body>
 </html>
-
-
-
-
-

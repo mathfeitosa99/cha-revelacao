@@ -1,0 +1,83 @@
+/* Correções específicas para Chrome e Edge */
+
+/* Garantir que o body tenha fundo visível */
+body {
+    background-color: #FAFAFA !important;
+    color: #2C2C2C !important;
+}
+
+/* Forçar visibilidade de todos os elementos principais */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Garantir que seções sejam visíveis */
+section {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+/* Forçar cores dos textos */
+h1, h2, h3, h4, h5, h6 {
+    color: #5D4E37 !important;
+}
+
+p {
+    color: #2C2C2C !important;
+}
+
+/* Correção para background-clip não suportado */
+.title {
+    color: #8B7355 !important;
+    background: none !important;
+    -webkit-text-fill-color: #8B7355 !important;
+}
+
+.subtitle {
+    color: #8B7355 !important;
+    background: none !important;
+    -webkit-text-fill-color: #8B7355 !important;
+}
+
+/* Garantir visibilidade dos botões */
+button {
+    background: #8B7355 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+}
+
+/* Garantir visibilidade dos inputs */
+input, select, textarea {
+    background: #FFFFFF !important;
+    color: #2C2C2C !important;
+    border: 2px solid #E8E8E8 !important;
+}
+
+/* Labels visíveis */
+label {
+    color: #2C2C2C !important;
+}
+
+/* Conteúdo das seções sempre visível */
+.content {
+    background: #FFFFFF !important;
+    color: #2C2C2C !important;
+}
+
+/* Hero section visível */
+.hero {
+    background: linear-gradient(135deg, #F5F5DC 0%, #E8E8E8 100%) !important;
+}
+
+.hero-content {
+    color: #2C2C2C !important;
+}
+
+.date {
+    color: #5D4E37 !important;
+}
+
+.time {
+    color: #666666 !important;
+}

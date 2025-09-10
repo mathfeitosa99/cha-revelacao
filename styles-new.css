@@ -172,7 +172,6 @@ section.animate-in {
 }
 
 /* bloco solto removido: estava quebrando o CSS */
-}
 
 .hero::before {
     content: '';
@@ -2066,4 +2065,3 @@ input, select, textarea, button {
     50% { transform: scale(0.9); -webkit-transform: scale(0.9); }
     100% { transform: scale(1); -webkit-transform: scale(1); }
 }
-

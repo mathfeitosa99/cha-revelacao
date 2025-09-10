@@ -1,27 +1,38 @@
 [build]
+  # Diretório de publicação (raiz do projeto)
   publish = "."
+  
+  # Comando de build (não necessário para site estático)
   command = "echo 'Site estático - sem build necessário'"
 
 [build.environment]
+  # Configurações de ambiente
   NODE_VERSION = "18"
+  
+[context.production.environment]
+  # Expor variáveis do Firebase para o cliente
+  FIREBASE_PUBLIC = "true"
 
 [[headers]]
+  # Aplicar headers para todos os arquivos
   for = "/*"
   [headers.values]
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://calendar.google.com https://maps.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; script-src 'self' 'unsafe-inline';"
-    Access-Control-Allow-Origin = "*"
+    # Cache para arquivos estáticos
     Cache-Control = "public, max-age=31536000"
+    # Segurança
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
 
 [[headers]]
+  # Headers específicos para HTML (sem cache)
   for = "/*.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
+  # Headers para arquivos CSS e JS
   for = "/*.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
@@ -34,20 +45,35 @@
     Content-Type = "application/javascript; charset=utf-8"
 
 [[headers]]
-  for = "/.(jpg|jpeg|png)$"
+  # Headers para imagens
+  for = "/*.jpg"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
+  for = "/*.jpeg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  # Headers para áudio
   for = "/*.mp3"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[redirects]]
+  # Redirect para index.html para SPAs (não necessário aqui, mas boa prática)
   from = "/*"
   to = "/index.html"
   status = 200
+  conditions = {Role = ["admin"], Country = ["US"]}
 
+# Configurações de formulários (caso precise no futuro)
 [build.processing]
   skip_processing = false
 
